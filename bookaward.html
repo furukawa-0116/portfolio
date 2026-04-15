@@ -532,25 +532,35 @@
     }
     .author-heading p { font-size: 0.78rem; color: #A07850; letter-spacing: 0.1em; }
 
-    .author-list { display: flex; flex-direction: column; gap: 1.2rem; }
+    .author-list { display: flex; flex-direction: column; gap: 0.6rem; }
     .author-group {
       background: #fff; border-radius: 0.6rem; border: 1px solid #EAE0D0; overflow: hidden;
     }
     .author-group-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.7rem 1rem; background: #FFFBF3; cursor: pointer;
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.8rem 1rem; background: #FFFBF3; cursor: pointer;
       border-bottom: 1px solid #EAE0D0; transition: background 0.15s;
     }
     .author-group-header:hover { background: #FFF5E5; }
-    .author-name { font-weight: 700; font-size: 0.95rem; color: #2A1810; }
-    .author-count {
-      font-size: 0.68rem; background: #C8973F; color: #fff;
-      padding: 0.15rem 0.6rem; border-radius: 1rem; font-weight: 700;
+    .author-rank {
+      font-family: Georgia, serif; font-size: 1.1rem; font-weight: 400;
+      color: #B09070; min-width: 1.8rem; text-align: center;
     }
+    .author-rank.top3 { color: #C8973F; font-size: 1.25rem; }
+    .author-main { flex: 1; min-width: 0; }
+    .author-name { font-weight: 700; font-size: 0.95rem; color: #2A1810; }
+    .author-taisho { font-size: 0.65rem; color: #C8973F; margin-top: 0.1rem; }
+    .author-bar-wrap { flex: 1; max-width: 160px; display: flex; align-items: center; gap: 0.5rem; }
+    .author-bar { height: 6px; border-radius: 3px; background: linear-gradient(90deg, #C8973F, #E8C878); }
+    .author-count {
+      font-size: 0.72rem; color: #8B6040; font-weight: 700; white-space: nowrap;
+    }
+    .author-arrow { color: #D0C4B4; font-size: 0.65rem; flex-shrink: 0; transition: transform 0.2s; }
+    .author-arrow.open { transform: rotate(90deg); }
     .author-books { padding: 0; }
     .author-books.collapsed { display: none; }
     .author-book {
-      display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1rem;
+      display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1rem 0.55rem 3.6rem;
       border-bottom: 1px solid #F5EDE0; cursor: pointer; transition: background 0.1s;
     }
     .author-book:last-child { border-bottom: none; }
@@ -1921,9 +1931,12 @@
 
     function openAuthorView() {
       const authors = buildAuthorData();
+      const maxCount = authors[0]?.count || 1;
       const listEl = document.getElementById('author-list');
 
       listEl.innerHTML = authors.map((a, i) => {
+        const rankNum = i + 1;
+        const wins = a.books.filter(b => b.rank === 1).length;
         const booksHtml = a.books
           .sort((x, y) => y.year - x.year)
           .map(b => {
@@ -1940,11 +1953,22 @@
               </div>`;
           }).join('');
 
+        const barWidth = Math.round((a.count / maxCount) * 100);
+        const taishoText = wins > 0 ? `大賞 ${wins}回` : '';
+
         return `
           <div class="author-group">
             <div class="author-group-header" onclick="toggleAuthorBooks(this)">
-              <span class="author-name">${a.author}</span>
-              <span class="author-count">${a.count}回</span>
+              <span class="author-rank${rankNum <= 3 ? ' top3' : ''}">${rankNum}</span>
+              <div class="author-main">
+                <div class="author-name">${a.author}</div>
+                ${taishoText ? `<div class="author-taisho">👑 ${taishoText}</div>` : ''}
+              </div>
+              <div class="author-bar-wrap">
+                <div class="author-bar" style="width:${barWidth}%"></div>
+                <span class="author-count">${a.count}回</span>
+              </div>
+              <span class="author-arrow${i < 5 ? ' open' : ''}">▶</span>
             </div>
             <div class="author-books${i >= 5 ? ' collapsed' : ''}">${booksHtml}</div>
           </div>`;
@@ -1961,6 +1985,7 @@
 
     function toggleAuthorBooks(header) {
       header.nextElementSibling.classList.toggle('collapsed');
+      header.querySelector('.author-arrow').classList.toggle('open');
     }
 
     function authorBookClick(year, rank) {
