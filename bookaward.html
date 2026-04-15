@@ -507,6 +507,61 @@
     .search-empty { padding: 1.2rem; text-align: center; font-size: 0.82rem; color: #A09080; }
     .search-count { font-size: 0.7rem; color: #B8A898; padding: 0.4rem 0.8rem; border-bottom: 1px solid #F0E8DC; }
 
+    /* ===== AUTHOR VIEW ===== */
+    .author-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(30,15,5,0.72);
+      z-index: 1000; align-items: flex-start; justify-content: center; padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+    .author-overlay.open { display: flex; }
+    .author-box {
+      background: #FAF5EC; border-radius: 1rem; width: 100%; max-width: 760px;
+      padding: 2rem; position: relative;
+      box-shadow: 0 24px 60px rgba(20,8,2,0.5); animation: fadeIn 0.25s;
+    }
+    .author-close {
+      position: absolute; top: 1rem; right: 1.25rem; background: none; border: none;
+      color: #A07850; font-size: 1.5rem; cursor: pointer;
+    }
+    .author-close:hover { color: #2A1810; }
+    .author-heading {
+      text-align: center; margin-bottom: 1.5rem;
+    }
+    .author-heading h2 {
+      font-family: Georgia, serif; font-size: 1.4rem; color: #2A1810; margin-bottom: 0.3rem;
+    }
+    .author-heading p { font-size: 0.78rem; color: #A07850; letter-spacing: 0.1em; }
+
+    .author-list { display: flex; flex-direction: column; gap: 1.2rem; }
+    .author-group {
+      background: #fff; border-radius: 0.6rem; border: 1px solid #EAE0D0; overflow: hidden;
+    }
+    .author-group-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.7rem 1rem; background: #FFFBF3; cursor: pointer;
+      border-bottom: 1px solid #EAE0D0; transition: background 0.15s;
+    }
+    .author-group-header:hover { background: #FFF5E5; }
+    .author-name { font-weight: 700; font-size: 0.95rem; color: #2A1810; }
+    .author-count {
+      font-size: 0.68rem; background: #C8973F; color: #fff;
+      padding: 0.15rem 0.6rem; border-radius: 1rem; font-weight: 700;
+    }
+    .author-books { padding: 0; }
+    .author-books.collapsed { display: none; }
+    .author-book {
+      display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1rem;
+      border-bottom: 1px solid #F5EDE0; cursor: pointer; transition: background 0.1s;
+    }
+    .author-book:last-child { border-bottom: none; }
+    .author-book:hover { background: #FBF6EE; }
+    .author-book img { width: 32px; height: 45px; object-fit: cover; border-radius: 0.15rem; flex-shrink: 0; }
+    .author-book-info { flex: 1; min-width: 0; }
+    .author-book-title { font-size: 0.82rem; font-weight: 600; color: #2A1810; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .author-book-meta { font-size: 0.68rem; color: #8B6040; }
+    .author-book-badge { font-size: 0.58rem; background: #EAE0D0; color: #8B6040; padding: 0.1rem 0.4rem; border-radius: 1rem; flex-shrink: 0; }
+    .author-book-badge.winner { background: #C8973F; color: #fff; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 600px) {
       /* Header */
@@ -566,6 +621,11 @@
       /* Era heading */
       .era-heading span { font-size: 0.9rem; }
       .era-section { margin-bottom: 2rem; }
+
+      /* Author view */
+      .author-overlay { padding: 1rem 0.5rem; }
+      .author-box { padding: 1.5rem 1rem; }
+      .author-heading h2 { font-size: 1.2rem; }
     }
 
     @media (max-width: 380px) {
@@ -592,7 +652,20 @@
     <a href="#era-2020s" class="jump-btn">2020s</a>
     <a href="#era-2010s" class="jump-btn">2010s</a>
     <a href="#era-2000s" class="jump-btn">2000s</a>
+    <button class="jump-btn" onclick="openAuthorView()" style="cursor:pointer;">✍ 著者別</button>
   </nav>
+
+  <!-- AUTHOR VIEW -->
+  <div class="author-overlay" id="author-overlay" onclick="if(event.target===this)closeAuthorView()">
+    <div class="author-box">
+      <button class="author-close" onclick="closeAuthorView()">✕</button>
+      <div class="author-heading">
+        <h2>著者別ノミネート一覧</h2>
+        <p>複数回ノミネートされた著者をランキング</p>
+      </div>
+      <div class="author-list" id="author-list"></div>
+    </div>
+  </div>
 
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
@@ -1825,6 +1898,75 @@
           </div>
         </div>
       `;
+    }
+
+    /* ===== AUTHOR VIEW ===== */
+    function buildAuthorData() {
+      const map = {};
+      Object.entries(awardsData).forEach(([year, data]) => {
+        data.nominees.forEach(book => {
+          if (!map[book.author]) map[book.author] = [];
+          const covers = nomineeCoverImages[year] || [];
+          map[book.author].push({
+            year: Number(year), rank: book.rank, title: book.title,
+            cover: covers[book.rank - 1] || '',
+          });
+        });
+      });
+      return Object.entries(map)
+        .map(([author, books]) => ({ author, books, count: books.length }))
+        .filter(a => a.count >= 2)
+        .sort((a, b) => b.count - a.count || a.author.localeCompare(b.author, 'ja'));
+    }
+
+    function openAuthorView() {
+      const authors = buildAuthorData();
+      const listEl = document.getElementById('author-list');
+
+      listEl.innerHTML = authors.map((a, i) => {
+        const booksHtml = a.books
+          .sort((x, y) => y.year - x.year)
+          .map(b => {
+            const isWinner = b.rank === 1;
+            const badge = isWinner ? `${b.year} 大賞` : `${b.year} ${b.rank}位`;
+            return `
+              <div class="author-book" onclick="authorBookClick(${b.year},${b.rank})">
+                ${b.cover ? `<img src="${b.cover}" alt="${b.title}" loading="lazy">` : ''}
+                <div class="author-book-info">
+                  <div class="author-book-title">${b.title}</div>
+                  <div class="author-book-meta">${b.year}年 第${awardsData[b.year].round}回</div>
+                </div>
+                <span class="author-book-badge${isWinner ? ' winner' : ''}">${badge}</span>
+              </div>`;
+          }).join('');
+
+        return `
+          <div class="author-group">
+            <div class="author-group-header" onclick="toggleAuthorBooks(this)">
+              <span class="author-name">${a.author}</span>
+              <span class="author-count">${a.count}回</span>
+            </div>
+            <div class="author-books${i >= 5 ? ' collapsed' : ''}">${booksHtml}</div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('author-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAuthorView() {
+      document.getElementById('author-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function toggleAuthorBooks(header) {
+      header.nextElementSibling.classList.toggle('collapsed');
+    }
+
+    function authorBookClick(year, rank) {
+      closeAuthorView();
+      openModal(year);
+      setTimeout(() => showBookDetail(year, rank), 50);
     }
 
     /* ===== SEARCH ===== */
