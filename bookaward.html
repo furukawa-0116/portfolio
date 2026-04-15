@@ -2081,6 +2081,33 @@
       setTimeout(() => showBookDetail(year, rank), 50);
     }
 
+    /* ===== GENRE DATA ===== */
+    const bookGenres = {
+      '2026-1':'社会派','2026-2':'ヒューマンドラマ','2026-3':'お仕事','2026-4':'ヒューマンドラマ','2026-5':'ミステリー','2026-6':'ミステリー','2026-7':'ヒューマンドラマ','2026-8':'ミステリー','2026-9':'ミステリー','2026-10':'SF・ファンタジー',
+      '2025-1':'ヒューマンドラマ','2025-2':'青春','2025-3':'ヒューマンドラマ','2025-4':'ミステリー','2025-5':'ヒューマンドラマ','2025-6':'青春','2025-7':'恋愛','2025-8':'社会派','2025-9':'青春','2025-10':'青春',
+      '2024-1':'青春','2024-2':'ヒューマンドラマ','2024-3':'ミステリー','2024-4':'ヒューマンドラマ','2024-5':'SF・ファンタジー','2024-6':'社会派','2024-7':'ヒューマンドラマ','2024-8':'恋愛','2024-9':'ミステリー','2024-10':'ヒューマンドラマ',
+      '2023-1':'恋愛','2023-2':'ミステリー','2023-3':'恋愛','2023-4':'ミステリー','2023-5':'ヒューマンドラマ','2023-6':'ミステリー','2023-7':'ミステリー','2023-8':'ヒューマンドラマ','2023-9':'ヒューマンドラマ','2023-10':'ミステリー',
+      '2022-1':'歴史・時代','2022-2':'恋愛','2022-3':'ヒューマンドラマ','2022-4':'社会派','2022-5':'ミステリー','2022-6':'社会派','2022-7':'SF・ファンタジー','2022-8':'ミステリー','2022-9':'歴史・時代','2022-10':'ヒューマンドラマ',
+      '2021-1':'ヒューマンドラマ','2021-2':'ヒューマンドラマ','2021-3':'青春','2021-4':'青春','2021-5':'恋愛','2021-6':'ヒューマンドラマ','2021-7':'SF・ファンタジー','2021-8':'青春','2021-9':'社会派','2021-10':'SF・ファンタジー',
+      '2020-1':'ヒューマンドラマ','2020-2':'ヒューマンドラマ','2020-3':'青春','2020-4':'ミステリー','2020-5':'歴史・時代','2020-6':'ミステリー','2020-7':'社会派','2020-8':'SF・ファンタジー','2020-9':'お仕事','2020-10':'ミステリー',
+      '2019-1':'ヒューマンドラマ','2019-2':'ヒューマンドラマ','2019-3':'歴史・時代','2019-4':'SF・ファンタジー','2019-5':'ヒューマンドラマ','2019-6':'ヒューマンドラマ','2019-7':'恋愛','2019-8':'お仕事','2019-9':'ミステリー','2019-10':'SF・ファンタジー',
+      '2018-1':'SF・ファンタジー','2018-2':'ミステリー','2018-3':'ミステリー','2018-4':'歴史・時代','2018-5':'ミステリー','2018-6':'お仕事','2018-7':'ヒューマンドラマ','2018-8':'恋愛','2018-9':'お仕事','2018-10':'ヒューマンドラマ',
+      '2017-1':'青春','2017-2':'ヒューマンドラマ','2017-3':'ミステリー','2017-4':'お仕事','2017-5':'お仕事','2017-6':'歴史・時代','2017-7':'ヒューマンドラマ','2017-8':'SF・ファンタジー','2017-9':'社会派','2017-10':'SF・ファンタジー',
+      '2016-1':'お仕事','2016-2':'恋愛','2016-3':'歴史・時代','2016-4':'ヒューマンドラマ','2016-5':'ヒューマンドラマ','2016-6':'ミステリー','2016-7':'歴史・時代','2016-8':'歴史・時代','2016-9':'社会派','2016-10':'ヒューマンドラマ',
+      '2015-1':'SF・ファンタジー','2015-2':'ヒューマンドラマ','2015-3':'お仕事','2015-4':'青春','2015-5':'ミステリー','2015-6':'ミステリー','2015-7':'ミステリー','2015-8':'SF・ファンタジー','2015-9':'恋愛','2015-10':'ヒューマンドラマ',
+      '2014-1':'歴史・時代','2014-2':'ヒューマンドラマ','2014-3':'青春','2014-4':'ヒューマンドラマ','2014-5':'歴史・時代','2014-6':'お仕事','2014-7':'お仕事','2014-8':'ヒューマンドラマ','2014-9':'SF・ファンタジー','2014-10':'ミステリー',
+      '2013-1':'歴史・時代','2013-2':'ミステリー','2013-3':'歴史・時代','2013-4':'ヒューマンドラマ','2013-5':'ヒューマンドラマ','2013-6':'ヒューマンドラマ','2013-7':'ミステリー','2013-8':'SF・ファンタジー','2013-9':'SF・ファンタジー','2013-10':'SF・ファンタジー',
+      '2012-1':'お仕事','2012-2':'SF・ファンタジー','2012-3':'歴史・時代','2012-4':'青春','2012-5':'ヒューマンドラマ','2012-6':'ミステリー','2012-7':'ヒューマンドラマ','2012-8':'ミステリー','2012-9':'SF・ファンタジー','2012-10':'恋愛',
+      '2011-1':'ミステリー','2011-2':'ヒューマンドラマ','2011-3':'SF・ファンタジー','2011-4':'ヒューマンドラマ','2011-5':'ミステリー','2011-6':'ミステリー','2011-7':'ミステリー','2011-8':'お仕事','2011-9':'青春','2011-10':'恋愛',
+      '2010-1':'歴史・時代','2010-2':'お仕事','2010-3':'青春','2010-4':'お仕事','2010-5':'ヒューマンドラマ','2010-6':'青春','2010-7':'青春','2010-8':'恋愛','2010-9':'ミステリー','2010-10':'SF・ファンタジー',
+      '2009-1':'ミステリー','2009-2':'歴史・時代','2009-3':'歴史・時代','2009-4':'歴史・時代','2009-5':'青春','2009-6':'SF・ファンタジー','2009-7':'歴史・時代','2009-8':'ヒューマンドラマ','2009-9':'ミステリー','2009-10':'SF・ファンタジー',
+      '2008-1':'ミステリー','2008-2':'青春','2008-3':'SF・ファンタジー','2008-4':'社会派','2008-5':'ヒューマンドラマ','2008-6':'ヒューマンドラマ','2008-7':'歴史・時代','2008-8':'SF・ファンタジー','2008-9':'ヒューマンドラマ','2008-10':'ヒューマンドラマ',
+      '2007-1':'青春','2007-2':'SF・ファンタジー','2007-3':'青春','2007-4':'SF・ファンタジー','2007-5':'SF・ファンタジー','2007-6':'SF・ファンタジー','2007-7':'ヒューマンドラマ','2007-8':'ヒューマンドラマ','2007-9':'SF・ファンタジー','2007-10':'ミステリー',
+      '2006-1':'ヒューマンドラマ','2006-2':'ヒューマンドラマ','2006-3':'SF・ファンタジー','2006-4':'ミステリー','2006-5':'ヒューマンドラマ','2006-6':'恋愛','2006-7':'ヒューマンドラマ','2006-8':'歴史・時代','2006-9':'お仕事','2006-10':'ヒューマンドラマ',
+      '2005-1':'青春','2005-2':'ヒューマンドラマ','2005-3':'SF・ファンタジー','2005-4':'恋愛','2005-5':'ミステリー','2005-6':'ヒューマンドラマ','2005-7':'ミステリー','2005-8':'歴史・時代','2005-9':'ヒューマンドラマ','2005-10':'恋愛',
+      '2004-1':'ヒューマンドラマ','2004-2':'お仕事','2004-3':'ミステリー','2004-4':'青春','2004-5':'ミステリー','2004-6':'青春','2004-7':'恋愛','2004-8':'歴史・時代','2004-9':'ミステリー','2004-10':'SF・ファンタジー',
+    };
+
     /* ===== SEARCH ===== */
     function buildSearchIndex() {
       const index = [];
@@ -2167,58 +2194,99 @@
       const el = document.getElementById('stats-content');
       const allBooks = [];
       const authorMap = {};
-      const publisherDecade = { '2000s': 0, '2010s': 0, '2020s': 0 };
       let totalNominees = 0;
-      let totalWinners = 0;
+
+      // Genre counts (overall + per era)
+      const genreOrder = ['ヒューマンドラマ','ミステリー','SF・ファンタジー','青春','歴史・時代','恋愛','お仕事','社会派'];
+      const genreTotal = {}; genreOrder.forEach(g => genreTotal[g] = 0);
+      const genreByEra = { '2000s': {}, '2010s': {}, '2020s': {} };
+      genreOrder.forEach(g => { genreByEra['2000s'][g]=0; genreByEra['2010s'][g]=0; genreByEra['2020s'][g]=0; });
+      const genreWinners = {}; genreOrder.forEach(g => genreWinners[g] = 0);
 
       Object.entries(awardsData).forEach(([year, data]) => {
         const y = Number(year);
+        const era = y >= 2020 ? '2020s' : y >= 2010 ? '2010s' : '2000s';
         data.nominees.forEach(book => {
           allBooks.push({ ...book, year: y });
           if (!authorMap[book.author]) authorMap[book.author] = { count: 0, wins: 0 };
           authorMap[book.author].count++;
-          if (book.rank === 1) { authorMap[book.author].wins++; totalWinners++; }
+          if (book.rank === 1) authorMap[book.author].wins++;
           totalNominees++;
+
+          const genre = bookGenres[`${y}-${book.rank}`];
+          if (genre) {
+            genreTotal[genre] = (genreTotal[genre] || 0) + 1;
+            genreByEra[era][genre] = (genreByEra[era][genre] || 0) + 1;
+            if (book.rank === 1) genreWinners[genre] = (genreWinners[genre] || 0) + 1;
+          }
         });
-        if (y >= 2020) publisherDecade['2020s'] += data.nominees.length;
-        else if (y >= 2010) publisherDecade['2010s'] += data.nominees.length;
-        else publisherDecade['2000s'] += data.nominees.length;
       });
 
       const uniqueAuthors = Object.keys(authorMap).length;
       const multiNom = Object.values(authorMap).filter(a => a.count >= 2).length;
-      const multiWin = Object.values(authorMap).filter(a => a.wins >= 2).length;
 
-      // Top nominated authors
-      const topAuthors = Object.entries(authorMap)
-        .sort((a, b) => b[1].count - a[1].count)
-        .slice(0, 8);
+      const topAuthors = Object.entries(authorMap).sort((a,b) => b[1].count - a[1].count).slice(0, 8);
       const topMax = topAuthors[0]?.[1].count || 1;
 
-      // Top winners
-      const topWinners = Object.entries(authorMap)
-        .filter(([, v]) => v.wins > 0)
-        .sort((a, b) => b[1].wins - a[1].wins || b[1].count - a[1].count)
-        .slice(0, 6);
+      const topWinners = Object.entries(authorMap).filter(([,v]) => v.wins > 0)
+        .sort((a,b) => b[1].wins - a[1].wins || b[1].count - a[1].count).slice(0, 8);
 
-      // Era stats
-      const eraData = {
-        '2000s': { years: '2004-2009', count: 0, authors: new Set() },
-        '2010s': { years: '2010-2019', count: 0, authors: new Set() },
-        '2020s': { years: '2020-2026', count: 0, authors: new Set() },
-      };
-      allBooks.forEach(b => {
-        const era = b.year >= 2020 ? '2020s' : b.year >= 2010 ? '2010s' : '2000s';
-        eraData[era].count++;
-        eraData[era].authors.add(b.author);
-      });
+      // Genre sorted by count
+      const genreSorted = genreOrder.slice().sort((a,b) => genreTotal[b] - genreTotal[a]);
+      const genreMax = genreTotal[genreSorted[0]] || 1;
+
+      // Era genre comparison
+      const eraNames = ['2000s','2010s','2020s'];
+      const eraYears = { '2000s':'2004-2009', '2010s':'2010-2019', '2020s':'2020-2026' };
+      const eraTotals = { '2000s': 60, '2010s': 100, '2020s': 70 };
 
       el.innerHTML = `
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-number">23</div><div class="stat-label">開催回数</div></div>
           <div class="stat-card"><div class="stat-number">${totalNominees}</div><div class="stat-label">総ノミネート</div></div>
-          <div class="stat-card"><div class="stat-number">${uniqueAuthors}</div><div class="stat-label">ノミネート著者数</div></div>
-          <div class="stat-card"><div class="stat-number">${multiNom}</div><div class="stat-label">複数回ノミネート</div></div>
+          <div class="stat-card"><div class="stat-number">${uniqueAuthors}</div><div class="stat-label">著者数</div></div>
+          <div class="stat-card"><div class="stat-number">8</div><div class="stat-label">ジャンル</div></div>
+        </div>
+
+        <div class="stats-section">
+          <div class="stats-section-title">ジャンル別ノミネート数</div>
+          ${genreSorted.map(g => `
+            <div class="stats-bar-row">
+              <div class="stats-bar-label">${g}</div>
+              <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(genreTotal[g]/genreMax*100)}%"></div></div>
+              <div class="stats-bar-val">${genreTotal[g]}作</div>
+            </div>`).join('')}
+        </div>
+
+        <div class="stats-section">
+          <div class="stats-section-title">大賞受賞作のジャンル分布</div>
+          ${genreOrder.filter(g => genreWinners[g] > 0).sort((a,b) => genreWinners[b] - genreWinners[a]).map(g => `
+            <div class="stats-bar-row">
+              <div class="stats-bar-label">${g}</div>
+              <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(genreWinners[g]/23*100)}%"></div></div>
+              <div class="stats-bar-val">${genreWinners[g]}回</div>
+            </div>`).join('')}
+        </div>
+
+        <div class="stats-section">
+          <div class="stats-section-title">年代別ジャンル傾向（構成比 %）</div>
+          <div class="stats-era-grid">
+            ${eraNames.map(era => {
+              const total = Object.values(genreByEra[era]).reduce((s,n) => s+n, 0) || 1;
+              const sorted = genreOrder.slice().sort((a,b) => genreByEra[era][b] - genreByEra[era][a]).filter(g => genreByEra[era][g] > 0);
+              return `
+                <div class="stats-era-card">
+                  <div class="stats-era-label">${era}</div>
+                  <div class="stats-era-val" style="font-size:0.68rem;">
+                    ${eraYears[era]}<br><br>
+                    ${sorted.map(g => {
+                      const pct = Math.round(genreByEra[era][g] / total * 100);
+                      return `${g} <b>${pct}%</b>`;
+                    }).join('<br>')}
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
         </div>
 
         <div class="stats-section">
@@ -2226,7 +2294,7 @@
           ${topAuthors.map(([name, v]) => `
             <div class="stats-bar-row">
               <div class="stats-bar-label">${name}</div>
-              <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(v.count / topMax * 100)}%"></div></div>
+              <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(v.count/topMax*100)}%"></div></div>
               <div class="stats-bar-val">${v.count}回</div>
             </div>`).join('')}
         </div>
@@ -2236,24 +2304,9 @@
           ${topWinners.map(([name, v]) => `
             <div class="stats-bar-row">
               <div class="stats-bar-label">${name}</div>
-              <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(v.wins / 2 * 100)}%"></div></div>
+              <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(v.wins/2*100)}%"></div></div>
               <div class="stats-bar-val">${v.wins === 1 ? '1回' : v.wins + '回 👑'}</div>
             </div>`).join('')}
-        </div>
-
-        <div class="stats-section">
-          <div class="stats-section-title">年代別データ</div>
-          <div class="stats-era-grid">
-            ${Object.entries(eraData).map(([era, d]) => `
-              <div class="stats-era-card">
-                <div class="stats-era-label">${era}</div>
-                <div class="stats-era-val">
-                  ${d.years}<br>
-                  ノミネート ${d.count}作品<br>
-                  著者 ${d.authors.size}名
-                </div>
-              </div>`).join('')}
-          </div>
         </div>
       `;
     }
