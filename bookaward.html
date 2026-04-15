@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本屋大賞 歴代受賞作</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #F7F0E3;
+      font-family: 'Segoe UI', sans-serif;
+      color: #2A1810;
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(170deg, #1E120A 0%, #2A1810 40%, #3A2218 100%);
+      text-align: center;
+      padding: 5.5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, rgba(200,151,63,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    header .eyebrow {
+      font-size: 0.82rem;
+      letter-spacing: 0.45em;
+      color: #C8973F;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      position: relative;
+    }
+    header h1 {
+      font-family: 'Georgia', serif;
+      font-size: 4.2rem;
+      color: #F7F0E3;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+      position: relative;
+      text-shadow: 0 2px 20px rgba(200,151,63,0.15);
+    }
+    header .subtitle {
+      font-size: 1rem;
+      color: #A07850;
+      letter-spacing: 0.2em;
+      position: relative;
+    }
+    .header-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #C8973F, transparent);
+      margin: 1.5rem auto 0;
+      position: relative;
+    }
+    .header-ornament {
+      font-size: 0.75rem; color: #C8973F; letter-spacing: 0.5em; margin-bottom: 0.6rem;
+      position: relative; opacity: 0.5;
+    }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    /* ===== ERA SECTION ===== */
+    .era-section { margin-bottom: 3rem; }
+    .era-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .era-heading span {
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
+      color: #8B5A2B;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+    .era-heading::before,
+    .era-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #DFD0BA;
+    }
+
+    /* ===== GRID ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: #FFFFFF;
+      border-radius: 0.6rem;
+      padding: 1.4rem 1.4rem 1.4rem 1.75rem;
+      box-shadow: 0 2px 10px rgba(42, 24, 16, 0.07);
+      border: 1px solid #EAE0D0;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: #C8973F;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(42, 24, 16, 0.13);
+    }
+    .card .year-badge {
+      display: inline-block;
+      background: #C8973F;
+      color: #FFF;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.7rem;
+      border-radius: 2rem;
+      margin-bottom: 0.7rem;
+    }
+    .card .award-num {
+      font-size: 0.68rem;
+      color: #B09070;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.55rem;
+    }
+    .card .title {
+      font-family: 'Georgia', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #2A1810;
+      line-height: 1.55;
+      margin-bottom: 0.6rem;
+    }
+    .card .author {
+      font-size: 0.82rem;
+      color: #7A5030;
+    }
+    .card .author::before {
+      content: "著 / ";
+      color: #C8973F;
+      font-size: 0.72rem;
+    }
+    .card .hint {
+      font-size: 0.68rem;
+      color: #C8973F;
+      margin-top: 0.75rem;
+      letter-spacing: 0.05em;
+      opacity: 0.8;
+    }
+    .card-cover {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .card-cover img {
+      width: 80px;
+      height: auto;
+      border-radius: 0.15rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 15, 5, 0.72);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: #FAF5EC;
+      border-radius: 1rem;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(20, 8, 2, 0.5);
+      position: relative;
+    }
+
+    .modal-header {
+      background: #2A1810;
+      padding: 1.5rem 2rem;
+      border-radius: 1rem 1rem 0 0;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .modal-year {
+      font-family: 'Georgia', serif;
+      font-size: 2rem;
+      color: #F7F0E3;
+      letter-spacing: 0.05em;
+    }
+    .modal-round {
+      font-size: 0.8rem;
+      color: #C8973F;
+      letter-spacing: 0.1em;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      color: #A07850;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: #F7F0E3; }
+
+    .modal-body { padding: 1.5rem 2rem 2rem; }
+
+    /* ===== BOOK LIST ===== */
+    .book-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .book-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #FFF;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 1px 6px rgba(42, 24, 16, 0.06);
+      border: 1px solid #EAE0D0;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .book-item:hover { transform: translateX(4px); box-shadow: 0 3px 12px rgba(42,24,16,0.1); }
+    .book-item.winner {
+      border-color: #C8973F;
+      background: #FFFBF3;
+    }
+
+    .book-rank {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #B09070;
+      min-width: 2rem;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .book-item.winner .book-rank {
+      color: #C8973F;
+    }
+
+    /* Cover */
+    .cover-wrap {
+      width: 52px;
+      min-width: 52px;
+      height: 74px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #EAE0D0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .cover-wrap.loading::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #EAE0D0 25%, #F7F0E3 50%, #EAE0D0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .cover-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .cover-wrap img.loaded { display: block; }
+    .cover-placeholder {
+      font-size: 1.4rem;
+      opacity: 0.4;
+    }
+    .cover-wrap.has-cover .cover-placeholder { display: none; }
+
+    /* Book info */
+    .book-info { flex: 1; min-width: 0; }
+    .book-title {
+      font-family: 'Georgia', serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #2A1810;
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .book-author {
+      font-size: 0.75rem;
+      color: #8B6040;
+    }
+
+    .winner-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      background: #C8973F;
+      color: #FFF;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2rem;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    /* ===== BOOK DETAIL ===== */
+    .book-detail { text-align: center; animation: fadeIn 0.2s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .book-detail-cover { width: 150px; border-radius: 0.3rem; box-shadow: 0 4px 16px rgba(0,0,0,0.15); margin-bottom: 1rem; }
+    .book-detail-title { font-family: Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #2A1810; margin-bottom: 0.2rem; }
+    .book-detail-author { font-size: 0.82rem; color: #8B6040; margin-bottom: 1rem; }
+    .book-detail-synopsis { text-align: left; font-size: 0.85rem; line-height: 1.85; color: #3A2A1A; background: #fff; padding: 1rem 1.2rem; border-radius: 0.4rem; border: 1px solid #EAE0D0; margin-bottom: 1rem; }
+    .book-detail-back { display: inline-block; font-size: 0.8rem; color: #C8973F; cursor: pointer; background: none; border: none; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .book-detail-back:hover { color: #8B5A2B; text-decoration: underline; }
+    .book-detail-links { display: flex; gap: 0.5rem; justify-content: center; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 1.75rem;
+      border-top: 1px solid #DFD0BA;
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: #8B5A2B;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    /* ===== JUMP NAV ===== */
+    .jump-nav {
+      background: #EDE4D3;
+      border-bottom: 1px solid #DFD0BA;
+      padding: 0.55rem 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .jump-btn {
+      display: inline-block;
+      color: #8B5A2B;
+      text-decoration: none;
+      font-family: 'Georgia', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 1.1rem;
+      border: 1px solid #C8973F;
+      border-radius: 0.25rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .jump-btn:hover { background: #C8973F; color: #fff; }
+
+    /* ===== AMAZON LINK ===== */
+    .amazon-link {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+      color: #C8973F;
+      text-decoration: none;
+      border: 1px solid #C8973F;
+      border-radius: 0.2rem;
+      padding: 0.15rem 0.6rem;
+      letter-spacing: 0.04em;
+      transition: background 0.15s, color 0.15s;
+    }
+    .amazon-link:hover { background: #C8973F; color: #fff; }
+    .book-amazon {
+      display: inline-block;
+      margin-top: 0.3rem;
+      font-size: 0.72rem;
+      color: #C8973F;
+      text-decoration: none;
+      border: 1px solid #C8973F;
+      border-radius: 0.2rem;
+      padding: 0.1rem 0.5rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .book-amazon:hover { background: #C8973F; color: #fff; }
+
+    /* ===== SHINDAN ===== */
+    .shindan-btn {
+      display: block; margin: 0 auto 2rem; padding: 0.7rem 2rem;
+      background: #C8973F; color: #fff; border: none; border-radius: 2rem;
+      font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em; cursor: pointer;
+      box-shadow: 0 3px 12px rgba(200,151,63,0.3); transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .shindan-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,151,63,0.4); }
+    .shindan-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(30,15,5,0.8);
+      z-index: 1100; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .shindan-overlay.open { display: flex; }
+    .shindan-box {
+      background: #FAF5EC; border-radius: 1rem; width: 100%; max-width: 500px;
+      padding: 2.5rem 2rem; text-align: center; position: relative;
+      box-shadow: 0 24px 60px rgba(20,8,2,0.5); animation: fadeIn 0.25s;
+    }
+    .shindan-close {
+      position: absolute; top: 0.8rem; right: 1rem; background: none; border: none;
+      color: #A07850; font-size: 1.3rem; cursor: pointer;
+    }
+    .shindan-step { font-size: 0.72rem; color: #C8973F; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+    .shindan-q { font-family: Georgia, serif; font-size: 1.15rem; color: #2A1810; margin-bottom: 1.5rem; line-height: 1.6; }
+    .shindan-options { display: flex; flex-direction: column; gap: 0.7rem; }
+    .shindan-opt {
+      padding: 0.85rem 1.2rem; background: #fff; border: 2px solid #EAE0D0; border-radius: 0.5rem;
+      font-size: 0.9rem; color: #2A1810; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    }
+    .shindan-opt:hover { border-color: #C8973F; background: #FFFBF3; }
+    .shindan-results-grid { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; text-align: left; }
+    .shindan-card {
+      display: flex; gap: 0.8rem; background: #fff; border-radius: 0.5rem; padding: 0.7rem;
+      border: 1px solid #EAE0D0; box-shadow: 0 1px 6px rgba(42,24,16,0.06);
+      cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .shindan-card:hover { border-color: #C8973F; box-shadow: 0 3px 12px rgba(42,24,16,0.1); }
+    .shindan-card img { width: 60px; height: 85px; object-fit: cover; border-radius: 0.2rem; flex-shrink: 0; }
+    .shindan-card-info { flex: 1; min-width: 0; }
+    .shindan-card-title { font-family: Georgia, serif; font-size: 0.92rem; font-weight: 700; color: #2A1810; margin-bottom: 0.15rem; }
+    .shindan-card-author { font-size: 0.72rem; color: #8B6040; margin-bottom: 0.2rem; }
+    .shindan-card-badge { display: inline-block; font-size: 0.62rem; background: #C8973F; color: #fff; padding: 0.1rem 0.45rem; border-radius: 1rem; margin-bottom: 0.25rem; }
+    .shindan-card-comment { font-size: 0.78rem; color: #5A4030; line-height: 1.5; }
+    .shindan-card-link { font-size: 0.68rem; color: #C8973F; text-decoration: none; margin-top: 0.2rem; display: inline-block; }
+    .shindan-card-link:hover { text-decoration: underline; }
+    .shindan-btns { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 0.5rem; }
+    .shindan-again { padding: 0.5rem 1.5rem; background: none; border: 2px solid #C8973F; color: #C8973F; border-radius: 2rem; font-size: 0.82rem; cursor: pointer; transition: background 0.15s, color 0.15s; }
+    .shindan-again:hover { background: #C8973F; color: #fff; }
+    .shindan-shuffle { padding: 0.5rem 1.5rem; background: #C8973F; border: 2px solid #C8973F; color: #fff; border-radius: 2rem; font-size: 0.82rem; cursor: pointer; transition: opacity 0.15s; }
+    .shindan-shuffle:hover { opacity: 0.85; }
+
+    /* ===== SEARCH ===== */
+    .search-wrap {
+      max-width: 480px; margin: 0 auto 2rem; padding: 0 1.5rem; position: relative;
+    }
+    .search-input {
+      width: 100%; padding: 0.7rem 1rem 0.7rem 2.6rem;
+      background: #FFFFFF; border: 1px solid #DFD0BA; border-radius: 2rem;
+      font-size: 0.88rem; color: #2A1810; outline: none;
+      font-family: 'Segoe UI', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input::placeholder { color: #B8A898; }
+    .search-input:focus { border-color: #C8973F; box-shadow: 0 0 0 3px rgba(200,151,63,0.12); }
+    .search-icon {
+      position: absolute; left: calc(1.5rem + 0.9rem); top: 50%; transform: translateY(-50%);
+      font-size: 0.9rem; color: #B8A898; pointer-events: none;
+    }
+    .search-results {
+      position: absolute; left: 1.5rem; right: 1.5rem; top: calc(100% + 0.3rem);
+      background: #FFF; border: 1px solid #DFD0BA; border-radius: 0.6rem;
+      box-shadow: 0 8px 24px rgba(42,24,16,0.12); max-height: 360px; overflow-y: auto;
+      z-index: 50; display: none;
+    }
+    .search-results.open { display: block; }
+    .search-item {
+      display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0.8rem;
+      cursor: pointer; border-bottom: 1px solid #F0E8DC; transition: background 0.1s;
+    }
+    .search-item:last-child { border-bottom: none; }
+    .search-item:hover { background: #FBF6EE; }
+    .search-item img { width: 36px; height: 50px; object-fit: cover; border-radius: 0.15rem; flex-shrink: 0; }
+    .search-item-info { flex: 1; min-width: 0; }
+    .search-item-title { font-size: 0.85rem; font-weight: 600; color: #2A1810; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .search-item-meta { font-size: 0.7rem; color: #8B6040; margin-top: 0.1rem; }
+    .search-item-badge { font-size: 0.58rem; background: #C8973F; color: #fff; padding: 0.08rem 0.4rem; border-radius: 1rem; flex-shrink: 0; }
+    .search-empty { padding: 1.2rem; text-align: center; font-size: 0.82rem; color: #A09080; }
+    .search-count { font-size: 0.7rem; color: #B8A898; padding: 0.4rem 0.8rem; border-bottom: 1px solid #F0E8DC; }
+
+  </style>
+</head>
+<body>
+
+
+  <header>
+    <div class="header-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <div class="eyebrow">— 全国書店員が選んだ —</div>
+    <h1>本屋大賞</h1>
+    <p class="subtitle">2004 — 2026 &nbsp;·&nbsp; 歴代受賞作 全 23 作品</p>
+    <div class="header-divider"></div>
+  </header>
+
+  <nav class="jump-nav">
+    <a href="#era-2020s" class="jump-btn">2020s</a>
+    <a href="#era-2010s" class="jump-btn">2010s</a>
+    <a href="#era-2000s" class="jump-btn">2000s</a>
+  </nav>
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="search-input" type="text" placeholder="タイトル・著者名で検索..." autocomplete="off">
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <button class="shindan-btn" onclick="startShindan()">📖 あなたにおすすめの1冊を診断する</button>
+
+  <!-- SHINDAN MODAL -->
+  <div class="shindan-overlay" id="shindan" onclick="if(event.target===this)closeShindan()">
+    <div class="shindan-box">
+      <button class="shindan-close" onclick="closeShindan()">✕</button>
+      <div id="shindan-content"></div>
+    </div>
+  </div>
+
+  <main>
+
+    <div class="era-section" id="era-2020s">
+      <div class="era-heading"><span>2020s</span></div>
+      <div class="grid" id="grid-2020s"></div>
+    </div>
+
+    <div class="era-section" id="era-2010s">
+      <div class="era-heading"><span>2010s</span></div>
+      <div class="grid" id="grid-2010s"></div>
+    </div>
+
+    <div class="era-section" id="era-2000s">
+      <div class="era-heading"><span>2000s</span></div>
+      <div class="grid" id="grid-2000s"></div>
+    </div>
+
+  </main>
+
+  <footer>
+    <a href="index.html">← Back to Top</a>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-header">
+        <div class="modal-year" id="modal-year"></div>
+        <div class="modal-round" id="modal-round"></div>
+      </div>
+      <div class="modal-body">
+        <div class="book-list" id="book-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function amazonUrl(title, author) {
+      return 'https://www.amazon.co.jp/s?k=' + encodeURIComponent(title + ' ' + author);
+    }
+
+    const coverImages = {
+      2026: 'https://www.hontai.or.jp/history/assets_c/2026/02/e05835884b5e4afdb49802505c4241a8227e9f81-thumb-240xauto-1797.jpg',
+      2025: 'https://www.hontai.or.jp/history/assets_c/2025/01/ee0b2aca19c7f8d06cb3fd3ac59247781ab60b5e-thumb-240xauto-1366.jpg',
+      2024: 'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_naruse-thumb-240xauto-695.jpg',
+      2023: 'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_nanji-thumb-240xauto-6.jpg',
+      2022: 'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_doushi-thumb-240xauto-21.jpg',
+      2021: 'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_52-thumb-240xauto-39.jpg',
+      2020: 'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_rurou-thumb-240xauto-54.jpg',
+      2019: 'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_soshite-thumb-240xauto-73.jpg',
+      2018: 'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_kagami_l-thumb-240xauto-96.jpg',
+      2017: 'https://www.hontai.or.jp/history/assets_c/2023/11/ca21c5169081db3687d4a4e39fb88a4c1435144a-thumb-240xauto-130.jpg',
+      2016: 'https://www.hontai.or.jp/history/assets_c/2023/11/75618a59fe89ecf0bf6f7975323fd9d72c2faa20-thumb-240xauto-144.jpg',
+      2015: 'https://www.hontai.or.jp/history/assets_c/2023/11/ffab75e2f2f813923423a98520d7d1515d9d2853-thumb-240xauto-145.jpg',
+      2014: 'https://www.hontai.or.jp/history/assets_c/2023/11/5c0f33052630966366ab5008ae90e669c54dcc1b-thumb-240xauto-148.jpg',
+      2013: 'https://www.hontai.or.jp/history/assets_c/2023/11/a88c5b3fb257cdbaf4aa46a077a1b9338a84fac9-thumb-240xauto-168.jpg',
+      2012: 'https://www.hontai.or.jp/history/assets_c/2023/11/0a7aa5f6c59d58eac77c7f0349ca270bf9f91414-thumb-240xauto-192.jpg',
+      2011: 'https://www.hontai.or.jp/history/assets_c/2023/11/08_nazotokihadinnernoatode-thumb-240xauto-209.jpg',
+      2010: 'https://www.hontai.or.jp/history/assets_c/2023/11/266b80bb6151e1dceb78721aeb91a9cb8f0221d3-thumb-180x262-220.jpg',
+      2009: 'https://www.hontai.or.jp/history/assets_c/2023/11/80426ec3c307eab52d3f30ed80cb86f42c05a048-thumb-200x295-232.jpg',
+      2008: 'https://www.hontai.or.jp/history/assets_c/2023/11/a5840f3867d71e2f36740db25efe220d88405d05-thumb-196x280-245.jpg',
+      2007: 'https://www.hontai.or.jp/history/assets_c/2023/11/8bbea986a47a02b832e6fb69c17d5348b2d7e7c8-thumb-160x232-257.jpg',
+      2006: 'https://www.hontai.or.jp/history/assets_c/2023/11/749772d05038839ce56dad11514d9bfcb5166a56-thumb-200x290-269.jpg',
+      2005: 'https://www.hontai.or.jp/history/assets_c/2023/11/6022ada6552085c22730186387b6f192bccde514-thumb-196x280-294.jpg',
+      2004: 'https://www.hontai.or.jp/history/assets_c/2023/11/e742af6ca8c6c841ca7efd56b80528a2432f4659-thumb-201x280-295.jpg',
+    };
+
+    const nomineeCoverImages = {
+      2026: [
+        'https://www.hontai.or.jp/history/assets_c/2026/02/e05835884b5e4afdb49802505c4241a8227e9f81-thumb-440xauto-1797.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/5653f208d6843c167f52f8b0fc6322c056543c1b-thumb-440xauto-1802.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/c9a5280bda9d50a69692eee2075347a1fc644d60-thumb-440xauto-1804.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/18d771adebf6ee1db19e36e1e062f74c0a2942a9-thumb-440xauto-1799.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/cef2d7872bf9ea796344fa57664c19fa4a3950a3-thumb-440xauto-1795.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/0c60567d35b2a502dd08a9b43de16ac3d48ad9a2-thumb-440xauto-1800.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/f69f3ee4f888aa92f133d6d918478898d510d3c1-thumb-440xauto-1796.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/689a365d228e09086027aee5a58a58d2a4634ba2-thumb-440xauto-1803.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/acc62813f247c5d08443dc5a3a96bda5ce81d686-thumb-440xauto-1798.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2026/02/3ec94055223c6e2c029b8cdd25d9f06021a88d80-thumb-440xauto-1801.jpg',
+      ],
+      2025: [
+        'https://www.hontai.or.jp/history/assets_c/2025/01/ee0b2aca19c7f8d06cb3fd3ac59247781ab60b5e-thumb-440xauto-1366.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/7ed4e60678143253109214196823ce067f424ab7-thumb-440xauto-1365.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/47224c973cd9529746832c9d153b7fd0523b2f75-thumb-440xauto-1369.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/d10af88ca991fca392233678168ebc9612c7d4b5-thumb-440xauto-1367.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/9fd17c294fdcef75b400edfe476d7f170f1f6dec-thumb-440xauto-1375.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/064f8931f35de57bd167e427f9b40244003baac1-thumb-440xauto-1372.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/1923e7e17fd2fb3ee7d1a3996117cdd1010dbe67-thumb-440xauto-1368.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/8f77aa73ce857e78d3a0bb71d410a7457ec4219d-thumb-440xauto-1373.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/57d0e370a2fd094eb99207aaba3f1fb2bf070b16-thumb-440xauto-1370.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2025/01/604f45cd42c55b7e7bc9d825a351c7bc2cd2a6c1-thumb-440xauto-1374.jpg',
+      ],
+      2024: [
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_naruse-thumb-440xauto-695.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_sui-thumb-440xauto-692.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_sonzai-thumb-440xauto-694.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_supi-thumb-440xauto-693.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_leende-thumb-440xauto-699.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_kiiro-thumb-440xauto-690.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_rikaba-thumb-440xauto-698.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_hoshi-thumb-440xauto-697.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_houkago-thumb-440xauto-696.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2024/03/bk2024_kimiga-thumb-440xauto-691.jpg',
+      ],
+      2023: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_nanji-thumb-440xauto-6.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_rabuka-thumb-440xauto-7.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_hikari-thumb-440xauto-8.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_baku-thumb-440xauto-9.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_tsuki-thumb-440xauto-11.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_kimi-thumb-440xauto-12.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_hako-thumb-440xauto-13.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_sora-thumb-440xauto-14.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_kawa-thumb-440xauto-15.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2023_hasyu-thumb-440xauto-16.jpg',
+      ],
+      2022: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_doushi-thumb-440xauto-21.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_akatoao-thumb-440xauto-22.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_small-thumb-440xauto-23.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_seiyoku-thumb-440xauto-24.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_roku-thumb-440xauto-25.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_yoga-thumb-440xauto-26.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_zan-thumb-440xauto-27.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_garasu-thumb-346x500-28.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_koku-thumb-346x500-29.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2022_hoshi-thumb-440xauto-30.jpg',
+      ],
+      2021: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_52-thumb-440xauto-39.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_osagashi-thumb-440xauto-40.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_inugaita-thumb-440xauto-41.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_gyakusoku-thumb-440xauto-42.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_jiten-thumb-440xauto-43.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_hachigatsu-thumb-440xauto-44.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_horobi-thumb-440xauto-45.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_orta-thumb-440xauto-46.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_oshi-thumb-440xauto-47.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2021_konohon-thumb-440xauto-48.jpg',
+      ],
+      2020: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_rurou-thumb-343x503-54.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_lion-thumb-343x506-55.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_senha-thumb-343x505-56.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_north-thumb-343x499-57.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_netsugen-thumb-343x502-58.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_medium-thumb-343x500-59.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_natsu-thumb-343x497-60.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_mugen-thumb-343x504-61.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_tencho-thumb-343x501-62.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2020_mukashi-thumb-343x507-63.jpg',
+      ],
+      2019: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_soshite-thumb-344x500-73.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_hito-thumb-440xauto-74.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_velrin-thumb-342x500-75.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_nettai-thumb-440xauto-76.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_aru-thumb-440xauto-77.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_sazanami-thumb-440xauto-78.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_ainaki-thumb-440xauto-79.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_hitotsumugi-thumb-440xauto-94.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a4675f8e58e371f0ecdce1346fa0c4087120ac82-thumb-440xauto-93.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2019_fugato-thumb-440xauto-81.jpg',
+      ],
+      2018: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_kagami_l-thumb-300x444-96.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_banjyo_l-thumb-300x441-97.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_shijin_l-thumb-300x444-95.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_tayutae_l-thumb-300x444-98.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_ax_l-thumb-300x440-99.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_damashie_l-thumb-300x427-100.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_hoshi_l-thumb-300x436-101.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_kuzureru_l-thumb-300x436-102.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_hyakka_l-thumb-300x441-103.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bk2018_kirakira_l-thumb-300x444-104.jpg',
+      ],
+      2017: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ca21c5169081db3687d4a4e39fb88a4c1435144a-thumb-440xauto-130.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e387493739410badd4119136f7bff1dc89edc7f8-thumb-362x500-132.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/68c2f65745bad9673498844192f63490499ba2bb-thumb-360x500-133.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/04ce81a2d44ba5114d5296b5b7c362dc094fb029-thumb-440xauto-134.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/3b68d833038fbfb8e023116df89381b5c13c7d00-thumb-440xauto-135.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/eba06b7dc1735c3515028d0309ab99dc5b75c6d0-thumb-339x500-136.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/01_i-thumb-253x367-138.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/58b586c0576ed031fe9ae8cfbdc3c2325c013ae6-thumb-440xauto-139.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ac5bcafed7c0a6e221a1c83cf22c0bed057e130c-thumb-440xauto-140.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/67ac849873e811fe3ba9c5cf37628890083e8f85-thumb-440xauto-141.jpg',
+      ],
+      2016: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/75618a59fe89ecf0bf6f7975323fd9d72c2faa20-thumb-440xauto-144.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/14f1107b859578dbdbe4622ef50ce2518ce93e43-thumb-440xauto-182.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/8bf03ed27d1363eda9e3c4bbfb4a64365c303eab-thumb-440xauto-185.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/f87e1f8cc49384d4e821d21c9ccc98e30c0dd812-thumb-440xauto-183.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/c077f6bdafb13189776eb06610b2db74d25034ff-thumb-440xauto-186.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/4ab686f80d0f012ab139d3232e9f514421dc3dd3-thumb-440xauto-187.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/54e67dccbd47473c69c4e8c7e55fd573fea31e05-thumb-440xauto-188.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/750f8cda08a51ea58cd4861782123b3e23618f85-thumb-440xauto-189.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2556ea392337b68e20d19089d63a18d1ce9c9870-thumb-440xauto-190.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a8b2e53851accf9cd267bbddbd17d94d9f6e072c-thumb-440xauto-191.jpg',
+      ],
+      2015: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ffab75e2f2f813923423a98520d7d1515d9d2853-thumb-440xauto-145.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2d7dca4ed0e361dea4e0d22a6ed2f092e4a18cec-thumb-440xauto-150.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/eaf07d9cbf9afb071da72bab638a8734c748395a-thumb-440xauto-151.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/67f43d1e4f372c929f36c4294b56daa3b67c5d7a-thumb-346x500-152.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/bd68c267805dff38aab1f1a0a479a640930943c6-thumb-440xauto-153.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/b8068601313be955ecf26943d424503a143ce107-thumb-440xauto-154.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/89c1efc4147586c2a560d84194381a13aa79e541-thumb-346x500-155.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/705c46ddce5574375f65fa37858d28b43459cb07-thumb-440xauto-156.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/90c92feba6f771fc1cd918aa575f27055c88942d-thumb-440xauto-157.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/148a5b3871dad58d1532bda6ba440118440a5969-thumb-440xauto-158.jpg',
+      ],
+      2014: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/5c0f33052630966366ab5008ae90e669c54dcc1b-thumb-440xauto-148.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/d3b4776721fce6a6ba35e71377ca63f71910d0d3-thumb-341x500-159.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/1840a54d718583d859c335faf707a2378e0faff7-thumb-347x500-160.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e398ab7daf83b8c736bdb9d46bdbbeeb3e60ce30-thumb-345x500-161.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/3d9f92f5d92222c9b2a0bc1d62fb15194b22a6ae-thumb-440xauto-162.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/16d4d0608c4a37dfac290685ea9fba5c10c44f25-thumb-347x500-163.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/69cc25c7ff5046bb29e2f3fa96d1100f983cdd33-thumb-347x500-164.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/33e7beb70b8ae1f0de45eaf87c00b484cfd512ba-thumb-343x500-165.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/80751499fadd0a0b3c2b86a4b80303f9bed65991-thumb-339x497-166.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/8a500fdc29078f71e39046a307a5db648f5b67e0-thumb-347x500-167.jpg',
+      ],
+      2013: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a88c5b3fb257cdbaf4aa46a077a1b9338a84fac9-thumb-440xauto-168.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/02_64-thumb-440xauto-169.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/6bc2d6fb840b28003efb6d28a45d6a8d1c80ad7b-thumb-440xauto-170.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/fe887929e6d9896cbdc3e0dcb8339bb48b615653-thumb-440xauto-171.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/961c9e2832acf11015f3fd9eaff10b2a1774fc0e-thumb-439x640-172.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/b76b17809c40fc48081903a84e89197a3e1c34d9-thumb-440xauto-173.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/7330046654f048b073088220a1c0e62ffa9d5f9c-thumb-440xauto-174.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/08cb1b964aa870de24009647d0ad9d7dbf7d4d22-thumb-440xauto-176.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/6f9c38ce8aca4ada1dc34c8bee51f6f06185237d-thumb-440xauto-177.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/00bf4106f5ba37fe138c5d37790b25a6da50fcf6-thumb-440xauto-178.jpg',
+      ],
+      2012: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/0a7aa5f6c59d58eac77c7f0349ca270bf9f91414-thumb-335x500-192.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ca1b86f0d140d73a8e89b32ad2ef90ed373da6c4-thumb-350x500-193.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ba6fca090a4fdebee16b87f53414475db98380aa-thumb-340x500-194.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/27c7a0846156b29aab0a5737c6a05c85262d2e62-thumb-344x500-195.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2154038913a6a2e99da8aaff8c88831678a0e0a2-thumb-300x443-196.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2ad1bae8d3fc3947ab7a909960f533855656676c-thumb-344x500-197.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/c9eac8d6e9fa8bc40c4f4effbf3a369fa67b33b1-thumb-345x500-198.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/d2ca45af6e5474805187b6c672be1b41292def5a-thumb-300x429-199.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/02c84e20d3bf13460cbf29998c14d098611f315d-thumb-358x500-200.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/d2373c7108b083d1e85d92140b0f26bff21edafd-thumb-340x500-201.jpg',
+      ],
+      2011: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/08_nazotokihadinnernoatode-thumb-300x430-209.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/09_fugainaibokuhasorawomita-thumb-300x445-210.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/10_penguinhighway-thumb-440xauto-211.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/02_ikariwoageyo-thumb-352x500-212.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/06_syumannoyubi-thumb-300x300-213.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/05_sakebitoinori-thumb-349x500-214.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/01_akunokyoten-thumb-333x450-215.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/03_kamisamanokarute-thumb-300x434-217.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/04_kiken-thumb-340x500-216.jpeg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e81ae58c504b1dfeb9b258ae4fabd1cab216a623-thumb-342x500-208.jpg',
+      ],
+      2010: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/266b80bb6151e1dceb78721aeb91a9cb8f0221d3-thumb-180x262-220.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/58ccf35c1ce83f8f26c0afa3a8e128451c0b73e4-thumb-440xauto-221.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e698b145911c9fd9ae46a90454c3246689c67422-thumb-427x640-222.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/3e3f907e0000226414fafe8177d10c596ecb2588-thumb-300x439-223.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/765cc5cd393c7697339a26bf175855c136484db9-thumb-437x640-224.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/1a56962c2313d0cee2954784b101540973347d2c-thumb-300x434-225.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/0fe7592137adf10c93d5c7f75e93d2836414b013-thumb-300x437-226.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/015e80fac88b719af604ea579c45379327855d05-thumb-440xauto-227.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/c646ed37b182258815bacf422f22c97379fe3491-thumb-440xauto-228.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/10_1Q84-thumb-440xauto-229.jpg',
+      ],
+      2009: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/80426ec3c307eab52d3f30ed80cb86f42c05a048-thumb-200x295-232.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/50def68efa5c09bba3116b2ac37be977210cc77c-thumb-300x441-233.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/d943df71b71f85cf9843a618f2a5b90e7aa7e6ff-thumb-300x444-234.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/1d4db3556f91ba268dbccc7e53e6ee778c655387-thumb-342x500-235.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/33b65dbea1f8503b67c5b74d64c1cd55de245081-thumb-440xauto-236.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/43a46acdda730a7708277662bf911cd5f4c3e20e-thumb-440xauto-237.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/8bd3700b6479ffbf112a00ba949b1ceda60fee79-thumb-347x502-238.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a3a1d5753853ccc8301f4310236fa91510d9a316-thumb-440xauto-240.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/77ce1fb77afbcb2813129b5391fc1a93723c1f90-thumb-440xauto-241.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/02ebfb7c2e6ae1b9147e7d9b47d894a1539d6ddd-thumb-440xauto-242.jpg',
+      ],
+      2008: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a5840f3867d71e2f36740db25efe220d88405d05-thumb-196x280-245.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/47a6e49b43cb040dc3c012a204d4f3bf5bdfbd90-thumb-300x440-246.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2c71f2d98a8d0a846bffdf9ec7590b3601e718a3-thumb-440xauto-247.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/3880eb664d7dd697bf87e1746bc9d985388c803b-thumb-252x359-248.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2d2c457b0552773a0e861ba07841a92f6c7c7559-thumb-300x430-249.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a3e659d57de767bf723ee2fb68b504bb608a18f8-thumb-300x430-250.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/0892a0b1738f885916b5267a8c4d28f67be00d9f-thumb-300x439-251.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/3e0e2a9289a0aa107380806a4029f6d0b71237cb-thumb-343x500-252.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/021acc78ca94a079af2429b64ff090eada3231ad-thumb-300x425-253.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/0417ca19fe6adec45ff83812d311198cfc8f3057-thumb-300x432-254.jpg',
+      ],
+      2007: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/8bbea986a47a02b832e6fb69c17d5348b2d7e7c8-thumb-160x232-257.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/8e9d89c57b20b726fcb7f6bb9b9539e7e3665e5f-thumb-302x440-258.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/1b13f7dbc3b1c40e09db1e785a21ac5b802c4586-thumb-300x437-259.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/37eb33b3b3cacd20969fe52d50f6ffba13e0182d-thumb-440xauto-260.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/c57f61d94947491fd9d1a8677801388859072741-thumb-302x441-261.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ea254cdaf2d746a90d9832cb67c94c658c624e71-thumb-302x434-262.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/7734314ef8ff398080fe05b1b4c98a2fca5fd1b0-thumb-300x439-263.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/caca412675fecdf92855e9c803435484b1592426-thumb-300x443-264.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e41e84078f2e79fa7e6585bd882080e559491a0b-thumb-300x433-265.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/c0f42d9d956a015785017699334aedde192de60a-thumb-300x439-266.jpg',
+      ],
+      2006: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/749772d05038839ce56dad11514d9bfcb5166a56-thumb-200x290-269.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/c1ae3097431ba1b65832e5688a404863a6b1cbcc-thumb-180x275-270.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2e836ee45dc8fd0ce85b715d0d9dbe27de364e30-thumb-346x500-271.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ba8edfcf2d95c60236403c07183286355db02004-thumb-347x500-272.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/f20e04e230f226864d433bbd64452d261c5d08b4-thumb-352x506-273.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/6ab094d92b70cef1e1260a2104ffcfd181145c9d-thumb-323x462-274.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/0840631d085897baa29a23390e2d086a7aa3739a-thumb-164x240-275.webp',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/247504649001d482d08e061f51eb7ccd44f7325e-thumb-364x520-276.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/5d4f10ae2c5435d2d171033c3a3085c3e0034306-thumb-348x508-277.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/6463981fb247317a2ace127abe80b6e5f8c7767d-thumb-360x500-278.jpg',
+      ],
+      2005: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/6022ada6552085c22730186387b6f192bccde514-thumb-196x280-294.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/36bf5244116288537289e9a7818ee415570a4c09-thumb-387x562-283.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/651c8d8b9e28d307e16bad8d8c62ceb711ee174d-thumb-440xauto-284.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/0036007b5c14229333709099b1d303605e4a75c5-thumb-440xauto-285.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/a6cc479aee78dc0e3c08d75e43933af0d61f0c83-thumb-440xauto-286.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/ff7628930b4a5ee91f2d2fa0c067da1fd455846f-thumb-345x500-287.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/9790e924b76e9bd925cf5972740b389ae9e30cdf-thumb-200x302-288.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e80627a6e3b8b3db03410b0ad7f207a7475b2bb2-thumb-325x475-289.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/36aae81a6fedaf6f01743634d3c246b7ba6e28a2-thumb-328x518-290.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/2b6c4fba7ed2ae5bfe9368016145cf5fd622ff84-thumb-355x514-291.jpg',
+      ],
+      2004: [
+        'https://www.hontai.or.jp/history/assets_c/2023/11/e742af6ca8c6c841ca7efd56b80528a2432f4659-thumb-201x280-295.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/aec5a39d7fa6aaca167787dcf515be2f961ef582-thumb-440xauto-296.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/8c2c5d15e0f751bda5f19442a5ea655eab5cbc52-thumb-218x315-297.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/f5ad42fa1c03e8a889f99e21b90a5c308c74f2ae-thumb-440xauto-298.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/b76d1fe20b34ad9da4a2c139b21cbef20d887eea-thumb-440xauto-299.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/06_4TEEN-thumb-404x600-300.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/5eded0045c53afc5aa23722de65666923d59f180-thumb-327x475-301.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/babaeeaaf412e22d57f5623de9a515c03a1fd55e-thumb-326x475-302.webp',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/63fb857ef958b4f3d33d3e03933978d4dabb8cb3-thumb-318x530-303.jpg',
+        'https://www.hontai.or.jp/history/assets_c/2023/11/26eba311bcde16127f47a93572c6c580eb063d1f-thumb-300x430-304.jpg',
+      ],
+    };
+
+    const eraMap = {
+      '2020s': [2026, 2025, 2024, 2023, 2022, 2021, 2020],
+      '2010s': [2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010],
+      '2000s': [2009, 2008, 2007, 2006, 2005, 2004],
+    };
+
+    function renderCards() {
+      Object.entries(eraMap).forEach(([era, years]) => {
+        const grid = document.getElementById('grid-' + era);
+        if (!grid) return;
+        years.forEach(year => {
+          const data = awardsData[year];
+          if (!data) return;
+          const winner = data.nominees.find(n => n.rank === 1);
+          const cover = coverImages[year];
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.onclick = () => openModal(year);
+          card.innerHTML = `
+            ${cover ? `<div class="card-cover"><img src="${cover}" alt="${winner.title}" loading="lazy"></div>` : ''}
+            <div class="year-badge">${year}</div>
+            <div class="award-num">第 ${data.round} 回</div>
+            <div class="title">${winner.title}</div>
+            <div class="author">${winner.author}</div>
+            <div class="hint">▶ ノミネート一覧</div>
+            <a class="amazon-link" href="${amazonUrl(winner.title, winner.author)}" target="_blank" onclick="event.stopPropagation()">Amazon で見る</a>
+          `;
+          grid.appendChild(card);
+        });
+      });
+    }
+
+    const awardsData = {
+      2026: { round: 23, nominees: [
+        { rank: 1, title: "イン・ザ・メガチャーチ", author: "朝井リョウ" },
+        { rank: 2, title: "熟柿", author: "佐藤正午" },
+        { rank: 3, title: "PRIZE プライズ", author: "村山由佳" },
+        { rank: 4, title: "エピクロスの処方箋", author: "夏川草介" },
+        { rank: 5, title: "暁星", author: "湊かなえ" },
+        { rank: 6, title: "殺し屋の営業術", author: "野宮有" },
+        { rank: 7, title: "ありか", author: "瀬尾まいこ" },
+        { rank: 8, title: "探偵小石は恋しない", author: "森バジル" },
+        { rank: 9, title: "失われた貌", author: "櫻田智也" },
+        { rank: 10, title: "さよならジャバウォック", author: "伊坂幸太郎" },
+      ]},
+      2025: { round: 22, nominees: [
+        { rank: 1, title: "カフネ", author: "阿部暁子" },
+        { rank: 2, title: "アルプス席の母", author: "早見和真" },
+        { rank: 3, title: "小説", author: "野崎まど" },
+        { rank: 4, title: "禁忌の子", author: "山口未桜" },
+        { rank: 5, title: "人魚が逃げた", author: "青山美智子" },
+        { rank: 6, title: "spring", author: "恩田陸" },
+        { rank: 7, title: "恋とか愛とかやさしさなら", author: "一穂ミチ" },
+        { rank: 8, title: "生殖記", author: "朝井リョウ" },
+        { rank: 9, title: "死んだ山田と教室", author: "金子玲介" },
+        { rank: 10, title: "成瀬は信じた道をいく", author: "宮島未奈" },
+      ]},
+      2024: { round: 21, nominees: [
+        { rank: 1, title: "成瀬は天下を取りにいく", author: "宮島未奈" },
+        { rank: 2, title: "水車小屋のネネ", author: "津村記久子" },
+        { rank: 3, title: "存在のすべてを", author: "塩田武士" },
+        { rank: 4, title: "スピノザの診察室", author: "夏川草介" },
+        { rank: 5, title: "レーエンデ国物語", author: "多崎礼" },
+        { rank: 6, title: "黄色い家", author: "川上未映子" },
+        { rank: 7, title: "リカバリー・カバヒコ", author: "青山美智子" },
+        { rank: 8, title: "星を編む", author: "凪良ゆう" },
+        { rank: 9, title: "放課後ミステリクラブ", author: "知念実希人" },
+        { rank: 10, title: "君が手にするはずだった黄金について", author: "小川哲" },
+      ]},
+      2023: { round: 20, nominees: [
+        { rank: 1, title: "汝、星のごとく", author: "凪良ゆう" },
+        { rank: 2, title: "ラブカは静かに弓を持つ", author: "安壇美緒" },
+        { rank: 3, title: "光のとこにいてね", author: "一穂ミチ" },
+        { rank: 4, title: "爆弾", author: "呉勝浩" },
+        { rank: 5, title: "月の立つ林で", author: "青山美智子" },
+        { rank: 6, title: "君のクイズ", author: "小川哲" },
+        { rank: 7, title: "方舟", author: "夕木春央" },
+        { rank: 8, title: "宙ごはん", author: "町田そのこ" },
+        { rank: 9, title: "川のほとりに立つ者は", author: "寺地はるな" },
+        { rank: 10, title: "真相をお話しします", author: "結城真一郎" },
+      ]},
+      2022: { round: 19, nominees: [
+        { rank: 1, title: "同志少女よ、敵を撃て", author: "逢坂冬馬" },
+        { rank: 2, title: "赤と青とエスキース", author: "青山美智子" },
+        { rank: 3, title: "スモールワールズ", author: "一穂ミチ" },
+        { rank: 4, title: "正欲", author: "朝井リョウ" },
+        { rank: 5, title: "六人の嘘つきな大学生", author: "浅倉秋成" },
+        { rank: 6, title: "夜が明ける", author: "西加奈子" },
+        { rank: 7, title: "残月記", author: "小田雅久仁" },
+        { rank: 8, title: "硝子の塔の殺人", author: "知念実希人" },
+        { rank: 9, title: "黒牢城", author: "米澤穂信" },
+        { rank: 10, title: "星を掬う", author: "町田そのこ" },
+      ]},
+      2021: { round: 18, nominees: [
+        { rank: 1, title: "52ヘルツのクジラたち", author: "町田そのこ" },
+        { rank: 2, title: "お探し物は図書室まで", author: "青山美智子" },
+        { rank: 3, title: "犬がいた季節", author: "伊吹有喜" },
+        { rank: 4, title: "逆ソクラテス", author: "伊坂幸太郎" },
+        { rank: 5, title: "自転しながら公転する", author: "山本文緒" },
+        { rank: 6, title: "八月の銀の雪", author: "伊与原新" },
+        { rank: 7, title: "滅びの前のシャングリラ", author: "凪良ゆう" },
+        { rank: 8, title: "オルタネート", author: "加藤シゲアキ" },
+        { rank: 9, title: "推し、燃ゆ", author: "宇佐見りん" },
+        { rank: 10, title: "この本を盗む者は", author: "深緑野分" },
+      ]},
+      2020: { round: 17, nominees: [
+        { rank: 1, title: "流浪の月", author: "凪良ゆう" },
+        { rank: 2, title: "ライオンのおやつ", author: "小川糸" },
+        { rank: 3, title: "線は、僕を描く", author: "砥上裕將" },
+        { rank: 4, title: "ノースライト", author: "横山秀夫" },
+        { rank: 5, title: "熱源", author: "川越宗一" },
+        { rank: 6, title: "medium 霊媒探偵城塚翡翠", author: "相沢沙呼" },
+        { rank: 7, title: "夏物語", author: "川上未映子" },
+        { rank: 8, title: "ムゲンのi", author: "知念実希人" },
+        { rank: 9, title: "店長がバカすぎて", author: "早見和真" },
+        { rank: 10, title: "むかしむかしあるところに、死体がありました。", author: "青柳碧人" },
+      ]},
+      2019: { round: 16, nominees: [
+        { rank: 1, title: "そして、バトンは渡された", author: "瀬尾まいこ" },
+        { rank: 2, title: "ひと", author: "小野寺史宜" },
+        { rank: 3, title: "ベルリンは晴れているか", author: "深緑野分" },
+        { rank: 4, title: "熱帯", author: "森見登美彦" },
+        { rank: 5, title: "ある男", author: "平野啓一郎" },
+        { rank: 6, title: "さざなみのよる", author: "木皿泉" },
+        { rank: 7, title: "愛なき世界", author: "三浦しをん" },
+        { rank: 8, title: "ひとつむぎの手", author: "知念実希人" },
+        { rank: 9, title: "火のないところに煙は", author: "芦沢央" },
+        { rank: 10, title: "フーガはユーガ", author: "伊坂幸太郎" },
+      ]},
+      2018: { round: 15, nominees: [
+        { rank: 1, title: "かがみの孤城", author: "辻村深月" },
+        { rank: 2, title: "盤上の向日葵", author: "柚月裕子" },
+        { rank: 3, title: "屍人荘の殺人", author: "今村昌弘" },
+        { rank: 4, title: "たゆたえども沈まず", author: "原田マハ" },
+        { rank: 5, title: "AX アックス", author: "伊坂幸太郎" },
+        { rank: 6, title: "騙し絵の牙", author: "塩田武士" },
+        { rank: 7, title: "星の子", author: "今村夏子" },
+        { rank: 8, title: "崩れる脳を抱きしめて", author: "知念実希人" },
+        { rank: 9, title: "百貨の魔法", author: "村山早紀" },
+        { rank: 10, title: "キラキラ共和国", author: "小川糸" },
+      ]},
+      2017: { round: 14, nominees: [
+        { rank: 1, title: "蜜蜂と遠雷", author: "恩田陸" },
+        { rank: 2, title: "みかづき", author: "森絵都" },
+        { rank: 3, title: "罪の声", author: "塩田武士" },
+        { rank: 4, title: "ツバキ文具店", author: "小川糸" },
+        { rank: 5, title: "桜風堂ものがたり", author: "村山早紀" },
+        { rank: 6, title: "暗幕のゲルニカ", author: "原田マハ" },
+        { rank: 7, title: "i", author: "西加奈子" },
+        { rank: 8, title: "夜行", author: "森見登美彦" },
+        { rank: 9, title: "コンビニ人間", author: "村田沙耶香" },
+        { rank: 10, title: "コーヒーが冷めないうちに", author: "川口俊和" },
+      ]},
+      2016: { round: 13, nominees: [
+        { rank: 1, title: "羊と鋼の森", author: "宮下奈都" },
+        { rank: 2, title: "君の膵臓をたべたい", author: "住野よる" },
+        { rank: 3, title: "世界の果てのこどもたち", author: "中脇初枝" },
+        { rank: 4, title: "永い言い訳", author: "西川美和" },
+        { rank: 5, title: "朝が来る", author: "辻村深月" },
+        { rank: 6, title: "王とサーカス", author: "米澤穂信" },
+        { rank: 7, title: "戦場のコックたち", author: "深緑野分" },
+        { rank: 8, title: "流", author: "東山彰良" },
+        { rank: 9, title: "教団X", author: "中村文則" },
+        { rank: 10, title: "火花", author: "又吉直樹" },
+      ]},
+      2015: { round: 12, nominees: [
+        { rank: 1, title: "鹿の王", author: "上橋菜穂子" },
+        { rank: 2, title: "サラバ！", author: "西加奈子" },
+        { rank: 3, title: "ハケンアニメ！", author: "辻村深月" },
+        { rank: 4, title: "本屋さんのダイアナ", author: "柚木麻子" },
+        { rank: 5, title: "土漠の花", author: "月村了衛" },
+        { rank: 6, title: "怒り", author: "吉田修一" },
+        { rank: 7, title: "満願", author: "米澤穂信" },
+        { rank: 8, title: "キャプテンサンダーボルト", author: "阿部和重・伊坂幸太郎" },
+        { rank: 9, title: "アイネクライネナハトムジーク", author: "伊坂幸太郎" },
+        { rank: 10, title: "億男", author: "川村元気" },
+      ]},
+      2014: { round: 11, nominees: [
+        { rank: 1, title: "村上海賊の娘", author: "和田竜" },
+        { rank: 2, title: "昨夜のカレー、明日のパン", author: "木皿泉" },
+        { rank: 3, title: "島はぼくらと", author: "辻村深月" },
+        { rank: 4, title: "さようなら、オレンジ", author: "岩城けい" },
+        { rank: 5, title: "とっぴんぱらりの風太郎", author: "万城目学" },
+        { rank: 6, title: "教場", author: "長岡弘樹" },
+        { rank: 7, title: "ランチのアッコちゃん", author: "柚木麻子" },
+        { rank: 8, title: "想像ラジオ", author: "いとうせいこう" },
+        { rank: 9, title: "聖なる怠け者の冒険", author: "森見登美彦" },
+        { rank: 10, title: "去年の冬、きみと別れ", author: "中村文則" },
+      ]},
+      2013: { round: 10, nominees: [
+        { rank: 1, title: "海賊とよばれた男", author: "百田尚樹" },
+        { rank: 2, title: "64", author: "横山秀夫" },
+        { rank: 3, title: "楽園のカンヴァス", author: "原田マハ" },
+        { rank: 4, title: "きみはいい子", author: "中脇初枝" },
+        { rank: 5, title: "ふくわらい", author: "西加奈子" },
+        { rank: 6, title: "晴天の迷いクジラ", author: "窪美澄" },
+        { rank: 7, title: "ソロモンの偽証", author: "宮部みゆき" },
+        { rank: 8, title: "世界から猫が消えたなら", author: "川村元気" },
+        { rank: 9, title: "百年法", author: "山田宗樹" },
+        { rank: 10, title: "屍者の帝国", author: "伊藤計劃・円城塔" },
+      ]},
+      2012: { round: 9, nominees: [
+        { rank: 1, title: "舟を編む", author: "三浦しをん" },
+        { rank: 2, title: "ジェノサイド", author: "高野和明" },
+        { rank: 3, title: "ピエタ", author: "大島真寿美" },
+        { rank: 4, title: "くちびるに歌を", author: "中田永一" },
+        { rank: 5, title: "人質の朗読会", author: "小川洋子" },
+        { rank: 6, title: "ユリゴコロ", author: "沼田まほかる" },
+        { rank: 7, title: "誰かが足りない", author: "宮下奈都" },
+        { rank: 8, title: "ビブリア古書堂の事件手帖", author: "三上延" },
+        { rank: 9, title: "偉大なる、しゅららぼん", author: "万城目学" },
+        { rank: 10, title: "プリズム", author: "百田尚樹" },
+      ]},
+      2011: { round: 8, nominees: [
+        { rank: 1, title: "謎解きはディナーのあとで", author: "東川篤哉" },
+        { rank: 2, title: "ふがいない僕は空を見た", author: "窪美澄" },
+        { rank: 3, title: "ペンギン・ハイウェイ", author: "森見登美彦" },
+        { rank: 4, title: "錨を上げよ", author: "百田尚樹" },
+        { rank: 5, title: "シューマンの指", author: "奥泉光" },
+        { rank: 6, title: "叫びと祈り", author: "梓崎優" },
+        { rank: 7, title: "悪の教典", author: "貴志祐介" },
+        { rank: 8, title: "神様のカルテ2", author: "夏川草介" },
+        { rank: 9, title: "キケン", author: "有川浩" },
+        { rank: 10, title: "ストーリー・セラー", author: "有川浩" },
+      ]},
+      2010: { round: 7, nominees: [
+        { rank: 1, title: "天地明察", author: "冲方丁" },
+        { rank: 2, title: "神様のカルテ", author: "夏川草介" },
+        { rank: 3, title: "横道世之介", author: "吉田修一" },
+        { rank: 4, title: "神去なあなあ日常", author: "三浦しをん" },
+        { rank: 5, title: "猫を抱いて象と泳ぐ", author: "小川洋子" },
+        { rank: 6, title: "ヘヴン", author: "川上未映子" },
+        { rank: 7, title: "船に乗れ！", author: "藤谷治" },
+        { rank: 8, title: "植物図鑑", author: "有川浩" },
+        { rank: 9, title: "新参者", author: "東野圭吾" },
+        { rank: 10, title: "1Q84", author: "村上春樹" },
+      ]},
+      2009: { round: 6, nominees: [
+        { rank: 1, title: "告白", author: "湊かなえ" },
+        { rank: 2, title: "のぼうの城", author: "和田竜" },
+        { rank: 3, title: "ジョーカー・ゲーム", author: "柳広司" },
+        { rank: 4, title: "テンペスト", author: "池上永一" },
+        { rank: 5, title: "ボックス！", author: "百田尚樹" },
+        { rank: 6, title: "新世界より", author: "貴志祐介" },
+        { rank: 7, title: "出星前夜", author: "飯嶋和一" },
+        { rank: 8, title: "悼む人", author: "天童荒太" },
+        { rank: 9, title: "流星の絆", author: "東野圭吾" },
+        { rank: 10, title: "モダンタイムス", author: "伊坂幸太郎" },
+      ]},
+      2008: { round: 5, nominees: [
+        { rank: 1, title: "ゴールデンスランバー", author: "伊坂幸太郎" },
+        { rank: 2, title: "サクリファイス", author: "近藤史恵" },
+        { rank: 3, title: "有頂天家族", author: "森見登美彦" },
+        { rank: 4, title: "悪人", author: "吉田修一" },
+        { rank: 5, title: "映画篇", author: "金城一紀" },
+        { rank: 6, title: "八日目の蝉", author: "角田光代" },
+        { rank: 7, title: "赤朽葉家の伝説", author: "桜庭一樹" },
+        { rank: 8, title: "鹿男あをによし", author: "万城目学" },
+        { rank: 9, title: "私の男", author: "桜庭一樹" },
+        { rank: 10, title: "カシオペアの丘で", author: "重松清" },
+      ]},
+      2007: { round: 4, nominees: [
+        { rank: 1, title: "一瞬の風になれ", author: "佐藤多佳子" },
+        { rank: 2, title: "夜は短し歩けよ乙女", author: "森見登美彦" },
+        { rank: 3, title: "風が強く吹いている", author: "三浦しをん" },
+        { rank: 4, title: "終末のフール", author: "伊坂幸太郎" },
+        { rank: 5, title: "図書館戦争", author: "有川浩" },
+        { rank: 6, title: "鴨川ホルモー", author: "万城目学" },
+        { rank: 7, title: "ミーナの行進", author: "小川洋子" },
+        { rank: 8, title: "陰日向に咲く", author: "劇団ひとり" },
+        { rank: 9, title: "失われた町", author: "三崎亜記" },
+        { rank: 10, title: "名もなき毒", author: "宮部みゆき" },
+      ]},
+      2006: { round: 3, nominees: [
+        { rank: 1, title: "東京タワー オカンとボクと、時々、オトン", author: "リリー・フランキー" },
+        { rank: 2, title: "サウスバウンド", author: "奥田英朗" },
+        { rank: 3, title: "死神の精度", author: "伊坂幸太郎" },
+        { rank: 4, title: "容疑者Xの献身", author: "東野圭吾" },
+        { rank: 5, title: "その日のまえに", author: "重松清" },
+        { rank: 6, title: "ナラタージュ", author: "島本理生" },
+        { rank: 7, title: "ベルカ、吠えないのか？", author: "古川日出男" },
+        { rank: 8, title: "県庁の星", author: "桂望実" },
+        { rank: 9, title: "さくら", author: "西加奈子" },
+        { rank: 10, title: "魔王", author: "伊坂幸太郎" },
+      ]},
+      2005: { round: 2, nominees: [
+        { rank: 1, title: "夜のピクニック", author: "恩田陸" },
+        { rank: 2, title: "明日の記憶", author: "荻原浩" },
+        { rank: 3, title: "家守綺譚", author: "梨木香歩" },
+        { rank: 4, title: "袋小路の男", author: "絲山秋子" },
+        { rank: 5, title: "チルドレン", author: "伊坂幸太郎" },
+        { rank: 6, title: "対岸の彼女", author: "角田光代" },
+        { rank: 7, title: "犯人に告ぐ", author: "雫井脩介" },
+        { rank: 8, title: "黄金旅風", author: "飯嶋和一" },
+        { rank: 9, title: "私が語りはじめた彼は", author: "三浦しをん" },
+        { rank: 10, title: "そのときは彼によろしく", author: "市川拓司" },
+      ]},
+      2004: { round: 1, nominees: [
+        { rank: 1, title: "博士の愛した数式", author: "小川洋子" },
+        { rank: 2, title: "クライマーズ・ハイ", author: "横山秀夫" },
+        { rank: 3, title: "アヒルと鴨のコインロッカー", author: "伊坂幸太郎" },
+        { rank: 4, title: "永遠の出口", author: "森絵都" },
+        { rank: 5, title: "重力ピエロ", author: "伊坂幸太郎" },
+        { rank: 6, title: "4TEEN", author: "石田衣良" },
+        { rank: 7, title: "デッドエンドの思い出", author: "よしもとばなな" },
+        { rank: 8, title: "終戦のローレライ", author: "福井晴敏" },
+        { rank: 9, title: "陰摩羅鬼の瑕", author: "京極夏彦" },
+        { rank: 10, title: "ららら科學の子", author: "矢作俊彦" },
+      ]},
+    };
+
+    const bookSynopses = {
+      '2026-1': 'レコード会社の社員、内向的な娘、元ファンの3つの視点からアイドルグループのファン文化を描く。推し活とは何か、ファンの心理を鋭くえぐる朝井リョウの最新作。',
+      '2026-2': '運転中に高齢者をはねてしまい、ひき逃げ犯となった女性。17年間にわたり、疎遠になった息子を探し続ける逃亡の日々を描く。',
+      '2026-3': '売れっ子作家が直木賞という文学的名誉を追い求める中、若い編集者との関係が複雑に絡み合っていく。',
+      '2026-4': '京都の地域病院で終末期医療に寄り添う医師が、古代哲学者エピクロスの教えを指針に患者の「生と死」に向き合う。',
+      '2026-5': '全国高校文化祭で現職の教育大臣が刺される事件が発生。逮捕された犯人が手記を公開し、カルト教団にまつわる悲劇的な過去が明かされていく。',
+      '2026-6': 'トップ営業マンが殺し屋と対峙し、交渉術だけで生き延びようとするビジネス×サスペンス。',
+      '2026-7': 'シングルマザーがパートで幼い娘を育てる中、ゲイの元夫の兄が静かに支え続ける。疎遠だった母の影が再び現れ、家族の形を問い直す物語。',
+      '2026-8': 'ミステリーに取りつかれた探偵が浮気調査を手がけるうち、過去の事件の詳細から大きな陰謀が浮かび上がる。',
+      '2026-9': '激しく損壊された身元不明の遺体が発見される。刑事の捜査は次第に複雑化し、複数の殺人事件へと広がっていく。',
+      '2026-10': 'DV夫を誤って殺してしまった女性が、謎の人物の助けを借りるうちに、SFテイストの物語へと導かれる。',
+      '2025-1': '法務局に勤める41歳の野宮薫子は、溺愛していた弟の突然の死に打ちのめされ、荒んだ生活を送っていた。弟が遺した遺言書をきっかけに、彼の元恋人・小野寺せつなと会うことになる。無愛想なせつなに苛立つ薫子だったが、彼女が振る舞った一皿の温かな料理が、凍りついた日常をほどいていく。',
+      '2025-2': '看護師の秋山菜々子は、神奈川で一人息子の航太郎を女手ひとつで育てていた。甲子園常連校を自分たちの手で倒す夢を追い、大阪の新興校へ。しかし待ち受けていたのは不慣れな土地での孤独、厳格な父母会の掟、そして目に見えて痩せていく息子の姿だった。',
+      '2025-3': '5歳で手にした「走れメロス」をきっかけに、内海集司の人生は小説一色に染まっていく。読書の喜びを分かち合える友と出会い、「モジャ屋敷」と呼ばれる古い洋館に忍び込む。膨大な蔵書と謎めいた「髭先生」との至福の日々が始まるが、やがてその屋敷にはある秘密が隠されていた。',
+      '2025-4': '救急医・武田のもとに搬送されてきた溺死体。身元不明のその遺体は、なんと武田自身と瓜二つだった。旧友の医師とともに調査を始めるが、鍵を握る人物が密室の中で死体となって発見されてしまう。',
+      '2025-5': 'ある3月の週末、SNS上で「人魚が逃げた」という言葉が突如トレンド入りする。「王子」と名乗る謎の青年が銀座の街をさまよっているらしい。その不可思議な騒動の裏で、人生の節目を迎えた5人の男女が銀座を訪れていた。',
+      '2025-6': '萬春（よろず・はる）。8歳でバレエに魅せられ、15歳で単身ドイツへ渡った天才ダンサー。留学時代のライバル、幼少期を見守った叔父、音楽の盟友、そして春自身という四つの視点から浮かび上がらせていく。構想・執筆十年、恩田陸が到達した圧巻のバレエ長編。',
+      '2025-7': 'カメラマンの新夏は、交際5年の恋人からプロポーズを受ける。だがその翌日、彼が通勤電車内で女子高生を盗撮した容疑で逮捕されてしまう。たった一度の"出来心"が恋人同士だけでなく、周囲の人々の関係にまで思いもよらない波紋を広げていく。',
+      '2025-8': '家電メーカーの総務部に勤める達家尚成は、ごく平凡な日常を送っている。しかしその内側には、異性愛を前提とした社会の中で本当の自分を押し殺し、「擬態」し続けてきた30余年の時間が横たわっている。そんな尚成の生態を、ある異質な「語り手」が淡々と実況する。',
+      '2025-9': '夏休みが終わる直前、男子校の人気者だった山田が飲酒運転の車に轢かれて死んだ。二学期初日、悲しみに沈む教室でスピーカーから山田の声が聞こえてきた。どうやら魂がスピーカーに憑依してしまったらしい。声だけになった山田と仲間たちの、騒がしくも不思議な日々がはじまる。',
+      '2025-10': '成瀬あかり、18歳。滋賀県大津市で我が道をゆく彼女の人生は、今日も誰かと交差する。個性豊かな面々が「成瀬あかり史」に名を刻むなか、幼馴染の島崎が故郷に戻ると、成瀬が書き置きを残して姿を消していて…。',
+      '2024-1': '中学生の成瀬あかりが、閉店予定のデパートに通ったりM-1グランプリに挑戦したりと予想外の行動を繰り返す。周囲の目を気にせず我が道を進む少女の青春ストーリー。',
+      '2024-2': '親から逃れた18歳の理佐と8歳の律姉妹が、転居先の町でしゃべる鳥「ネネ」に見守られながら、地域の大人たちに支えられ成長していく希望と再生の物語。',
+      '2024-3': '平成3年の誘拐事件から30年後、元警察担当記者が被害男児の現在を知ることになり、奇妙な事件の真実を追い、ある写実画家の存在が浮かび上がる。',
+      '2024-4': '京都の地域病院の内科医・雄町哲郎が、余命短い患者たちに寄り添う。哲学者スピノザの思想を通じて「命をどう生きるか」を問いかける。',
+      '2024-5': '貴族の娘ユリアが父と旅に出た呪われた地レーエンデで、弓の名手トリスタンと出会い恋をするが、やがて土地の呪いと争乱に巻き込まれる王道ファンタジー。',
+      '2024-6': '貧困から抜け出そうとする花が、かつて一緒に暮らした吉川黄美子の逮捕をニュースで知る。20年前の記憶が蘇り、疑似家族として暮らしながら罪を重ねていった過去が明かされる。',
+      '2024-7': '公園の古びたカバの遊具「カバヒコ」に、マンション住人たちが悩みを打ち明ける。年齢や性別異なる人々が自分の弱さを受け入れ前に進む連作短編集。',
+      '2024-8': '「汝、星のごとく」の続編。北原先生の秘められた過去、櫂の編集者たちの奮闘などスピンオフ3編を収録。常識にとらわれず自分らしく生きる人物たちの姿を描く。',
+      '2024-9': '夜の学校プールに放たれた金魚の謎を、「ミステリトリオ」と呼ばれる3人の生徒たちが先生の依頼で調査する。読者も名探偵の謎解きに挑戦できる作品。',
+      '2024-10': '著者自身を思わせる「僕」が、成功を望む怪しげな占い師やトレーダーなど胡散くさい人物たちと遭遇する6つの短編集。虚実が混在し、何が真実なのか翻弄される。',
+      '2023-1': '瀬戸内の島で生まれ育った高校生の暁海と、母にふりまわされ島に転校してきた櫂。孤独と欠落を抱えていた2人は惹かれ合い、すれ違い、少しずつ成長していく。生きることの自由さと幸せのあり方を描く。',
+      '2023-2': '幼いとき、チェロ教室の帰り道である事件にあってから深海の悪夢に囚われてきた橘。上司の命令により音楽教室への潜入調査を行うことに。身分を偽ってチェロ講師・浅葉のレッスンに通いはじめた。',
+      '2023-3': '小学2年のとき、古びた団地の片隅で彼女と出会った。わたしと彼女はすべてが違った。それでも彼女が笑うと、わたしも笑顔になれた。ずっと一緒にはいられなくても、この一瞬がずっと続くことを祈っている。',
+      '2023-4': 'ある夜、たわいない傷害事件でスズキタゴサクという冴えない中年男が捕まった。スズキは取調べのさなかに「十時に秋葉原で爆発がある」と予言。当初相手にしていなかった警察だが、予言どおりに爆発が発生する。',
+      '2023-5': '元看護師、売れない芸人、二輪自動車整備士、女子高生、アクセサリー作家。つまずいてばかりの日常で、それぞれが耳にするのはタケトリ・オキナという男のポッドキャスト「ツキない話」だった。',
+      '2023-6': '1000万円の賞金がかかった生放送のTVクイズ番組の決勝戦。まだ1文字も問題が読まれる前に、対戦相手がボタンを押して優勝した。なぜ彼は問題が読まれていないのに正解できたのか？',
+      '2023-7': '大学時代の仲間たちと山奥の地下建築を訪れた柊一。夜明けに発生した地震で扉が岩でふさがれ、地盤の異変で水が流入しはじめる。およそ1週間で水没するという極限状況に。',
+      '2023-8': '育ててくれている「ママ」と、産んでくれた「お母さん」のふたりの母親がいる宙。パパの海外赴任で産みの母と暮らすことになるが、すれ違う生活の中で料理をとおして描かれる成長物語。',
+      '2023-9': '若くしてカフェの店長をする清瀬は、恋人の松本がケガをして意識不明だと知らされる。松本の部屋で見つけたノートには、彼がずっと隠していた秘密が書かれていて…。',
+      '2023-10': '現代の日本を映し出しながら、緻密な構成と予想もつかない「どんでん返し」が待っている珠玉の5篇を収録した短編集。',
+      '2022-1': '1942年、ドイツ軍襲撃で母を殺された18歳の少女セラフィマが、女性狙撃兵部隊で訓練を受け、スターリングラード前線へ向かう独ソ戦の歴史冒険譚。',
+      '2022-2': '留学先メルボルンで出会った女子大生レイと日系人ブーの「期間限定の恋人」関係から始まる、1枚の絵画をめぐる4つの短編集。',
+      '2022-3': '子どもを望む主婦と困難な家庭環境の少年、出戻った姉と弟、殺人被害者の妹と加害者など、苦しみを抱える人びとの人生を描く6つの連作短編。',
+      '2022-4': '検事、大学生、寝具店店員が事件をきっかけに重なり合う。「多様性」重視の現代で、異なる立場の人びとが直面する生きづらさと「正しさ」を問う物語。',
+      '2022-5': 'IT企業の新卒採用最終選考に残った6人の大学生が、グループディスカッションで互いの過去の「罪」を暴かれながら、内定1人枠を巡って心理戦を繰り広げる。',
+      '2022-6': '15歳から33歳までの15年間、普通の少年と困難な家庭環境の少年の友情と成長。貧困や過重労働など現代社会の闇に抗いながら生きる2人の姿。',
+      '2022-7': '全体主義独裁国家の日本で、感染症に冒された男の運命と傍らで生きる女の愛を描く表題作を含む、月をモチーフにした3編のダークファンタジー。',
+      '2022-8': 'ミステリーマニアの大富豪に招かれたゲストたちが、雪に閉ざされたガラス張りの塔で次々と起きる殺人事件に直面する本格ミステリー。',
+      '2022-9': '天正6年、有岡城に籠った荒木村重。城内で起きる難事件の中、土牢に幽閉された黒田官兵衛が安楽椅子探偵役として謎を解く戦国ミステリー。',
+      '2022-10': 'ラジオ投稿をきっかけに22年ぶりに再会した母娘が、共同生活を通じて過去のわだかまりをほぐし、人生を歩み直そうとする物語。',
+      '2021-1': '家族によって人生を搾取され続けてきた貴瑚が、海辺の田舎に引っ越し、母に虐待され「ムシ」と呼ばれている少年に出会う。誰にも届かない悲痛な叫びを救うための物語。',
+      '2021-2': '町のコミュニティセンターの小さな図書館。人生に悩みを抱えた人びとが訪れ、不愛想ながら聞き上手な司書さんが少し変わった選書をしてくれる。',
+      '2021-3': '1988年、高校にふと迷い込んだ一匹の白い子犬「コーシロー」。生徒とともに学校生活を過ごし、時代を彩った音楽とともに描いた瑞々しい青春小説。',
+      '2021-4': '敵は、先入観。「僕はそうは思わない」。読者に向けて投げかけられるような言葉の数々にハッとさせられる5つの短編集。',
+      '2021-5': '東京のアパレルで働いていた32歳の都は、母親の看病のため茨城の実家に戻り、回転寿司で働く貫一とつき合うことに。しかし彼との将来に不安を隠せない。両親の体調悪化、職場でのセクハラやパワハラと問題が重なり…。',
+      '2021-6': '就活連敗続きの理系大学生がコンビニのベトナム人店員の驚きの姿に出会う。科学の揺るぎない真実が傷ついた心に希望の灯りをともす5つの物語。',
+      '2021-7': '1ヶ月後、小惑星が地球に衝突する。いじめを受ける友樹、人を殺めたヤクザの信士、恋人から逃げ出した静香。滅亡を前に、4人は生きていく意味を探る。',
+      '2021-8': '高校生限定のマッチングアプリ「オルタネート」が当たり前な現代。料理コンテストの悲劇、運命の愛を求める少女、バンド仲間を探す中退者。3人の若者の運命が交錯していく。',
+      '2021-9': '女子高生のあかりは、アイドルの推しに心血を注いでいる。だがある事件をきっかけに推しが炎上。ままならない人生に大きな波紋がもたらされて…。',
+      '2021-10': '巨大な書庫を持つ家に生まれた高校生の深冬は本が好きではない。ある日蔵書が盗まれ、街は本の呪いにより物語の世界へ一変する。泥棒を捕まえるため物語の世界を冒険する。',
+      '2020-1': '再会すべきではなかったかもしれない男女がもう一度出会ったとき、運命は周囲の人を巻き込みながら疾走を始める。新しい人間関係への旅立ちを描く傑作小説。',
+      '2020-2': '33歳の海野雫は癌に蝕まれ余命を告げられる。瀬戸内の島にあるホスピス「ライオンの家」で、毎週日曜日の「おやつの時間」に思い出のおやつをリクエストしながら、穏やかな日々を過ごす。',
+      '2020-3': '両親を交通事故で亡くした大学生の青山霜介が、日本を代表する芸術家・篠田湖山に出会い内弟子にされる。水墨画の線を描くことで、生きることの意味を見出していく。',
+      '2020-4': '依頼を受け設計した新築の家。しかしそこに家族の姿はなく、あるのは「タウトの椅子」が一脚あるだけ。複雑な人間模様と家族の想いに優しい光がふりそそぐ。',
+      '2020-5': '故郷を奪われ、生き方を変えられたアイヌの人々。樺太（サハリン）の極寒の地で、時代に翻弄されながら生きていくための「熱」を追い求める圧巻の歴史小説。',
+      '2020-6': '推理作家の香月史郎が霊媒師の城塚翡翠と共に事件を解決する。翡翠の霊視をもとに香月が論理を組み立て、警察でも掴めない事件を解き明かす。',
+      '2020-7': '東京で小説家として生きる38歳の夏子には「自分の子どもに会いたい」という願いが芽生える。パートナーなしの出産の方法を探るうち、精子提供で生まれた逢沢潤と出会う。この世界は生まれてくるのに値するのか。',
+      '2020-8': '28歳の女医・識名愛衣の病院で、4人の患者が謎の奇病にかかる。ひたすら眠り続ける特発性嗜眠症候群。愛衣はユタの力で患者の夢の世界に入り込み、魂の救済を試みる。',
+      '2020-9': '谷原京子、28歳。とにかく本が好き。「非」敏腕店長の元、文芸書担当として次から次へとトラブルに遭いながら働く日々。あこがれの先輩書店員が辞めることになり…。',
+      '2020-10': '「一寸法師」「花咲か爺さん」「鶴の恩返し」「浦島太郎」「桃太郎」。誰もが知っている昔ばなしを大胆にミステリーにアレンジした短編集。',
+      '2019-1': '母を亡くし父とも別れた優子が、血のつながらない親たちにリレーされながら育つ。彼女が伴侶を持つときまでの物語。',
+      '2019-2': '独り身となった大学生が、砂町銀座商店街の惣菜屋で見知らぬ老婆にコロッケを譲ったことから始まる人間関係の物語。',
+      '2019-3': '1945年のベルリンを舞台に、米国製の歯磨き粉に含まれた毒による不審死の謎を追う歴史ミステリ。',
+      '2019-4': '作家自身が「読み終えられない本」を探し求め、謎の女性や秘密組織に関わり東京から京都へと物語が展開する。',
+      '2019-5': '愛した夫が「全くの別人」だった衝撃。過去を変えて生きる男たちの姿を通じ、愛にとって過去とは何かを問う。',
+      '2019-6': '43歳の女性の死後、彼女の言葉と存在が家族や友人へと波紋のように広がっていく。',
+      '2019-7': '植物研究に一途な大学院生への片思いをめぐり、個性の強い理系の人々とお料理男子が繰り広げる青春小説。',
+      '2019-8': '大学病院の心臓外科医が研修医を指導しながら、命を縫い患者の人生を紡ぐ医療ドラマ。',
+      '2019-9': '忘れたい過去を封印していた作家が、神楽坂を舞台に怪談執筆を依頼され、謎と恐怖が絡み合うミステリ。',
+      '2019-10': '双子の兄弟が不幸な子供時代と特別な能力を通じ、邪悪な存在に立ち向かう闘いと再生の物語。',
+      '2018-1': '学校に居場所をなくした少女が鏡を通じて城のような建物へ。似た境遇の7人が集められ、大きな感動に包まれる。',
+      '2018-2': '白骨死体と名匠の将棋駒から始まる捜査。刑事たちが駒の足跡を追い、天才棋士の人生が交差する人間ドラマ。',
+      '2018-3': 'ペンション内での夏合宿中に連続殺人が発生。二人の名探偵が謎に立ち向かうクローズド・サークルミステリー。',
+      '2018-4': '19世紀パリで画商たちがゴッホと出会い、世界を変える作品が生まれるまでのアート・フィクション。',
+      '2018-5': '超一流の殺し屋が家では恐妻家。引退を目指すが物騒な事件に巻き込まれるエンタメ小説。',
+      '2018-6': '出版社の編集長が経営危機に直面。社内政争の中、ラストに驚愕の真実が明かされる群像小説。',
+      '2018-7': '病弱な娘を救いたい両親が宗教にのめり込み、家族の形が歪んでいく。',
+      '2018-8': '脳腫瘍の女性と研修医が出会い心を通わせるが、彼女の死の知らせが届く恋愛ミステリー。',
+      '2018-9': '閉店が危ぶまれる百貨店で働く人々が、街の人びとに愛される店を守ろうとする。',
+      '2018-10': '鎌倉の文具店を営む女性が代書の依頼を受けながら、穏やかな日々を過ごす続編。',
+      '2017-1': 'ピアノコンクールを舞台に、異なる背景を持つ4人の天才たちが自分自身と向き合う競争の物語。',
+      '2017-2': '昭和36年から始まる学習塾の創設と成長を通じて、複数世代にわたる大島家の人生模様を描く大河小説。',
+      '2017-3': '昭和の未解決事件に自分の幼少期の声が関わっていたことを発見した男と、事件を追う新聞記者の二つの視点から真実に迫る。',
+      '2017-4': '鎌倉で手紙の代書サービスを行う女性が、依頼者の心に寄り添うことで自らの過去と向き合う。',
+      '2017-5': '書店員が起こした事件で傷心を抱え旅に出て、ネットで交流していた老書店主を訪ねる中で心の再生を遂げる。',
+      '2017-6': 'ピカソの名画をめぐる陰謀を追うアートサスペンス。現代と過去が交錯する中で真実が明かされる。',
+      '2017-7': 'アメリカ人の父と日本人の母を持つ養子が、世界の不公平さに向き合いながら自らの道を切り開く。',
+      '2017-8': '十年前に消えた友人の謎を追うため京都に集まった6人が旅先での怪奇体験を語り合う、ファンタジー色の強い作品。',
+      '2017-9': '18年間コンビニでバイトをしている36歳の女性が「普通」とは何かを問う現代小説。芥川賞受賞作。',
+      '2017-10': '喫茶店の特別な座席で過去に戻ることができるという設定で、4つの心温まる物語が描かれる。',
+      '2016-1': 'ピアノ調律師を目指す青年の成長物語。調律の世界への魅力と音楽を通じた人間関係を描く。',
+      '2016-2': '病院で拾った日記帳からクラスメイトの余命を知った高校生の交流を描く。',
+      '2016-3': '戦時中の満州で出会った3人の少女が友情を育み、戦後それぞれの人生を歩む軌跡を綴る。',
+      '2016-4': '妻の死を機に、同じく妻を失った男との関係を通じて人生の再構築を描く。',
+      '2016-5': '不妊治療と養子縁組に関わる夫婦と若き母親の葛藤と人生を丹念に描いた長編。',
+      '2016-6': 'ネパール取材中に王族殺害事件に遭遇した記者が、複雑な謎を追うミステリ。',
+      '2016-7': '1944年、戦地でコック兵として日常の謎を見つけることを心の慰めとする兵士たちの物語。',
+      '2016-8': '祖父の死の謎を追って台湾、日本、中国を巡る青年の流浪と家族の軌跡を描く歴史冒険小説。',
+      '2016-9': '対立する宗教団体に関わる4人の運命が絡み合う中、現代日本の虚無を描くサスペンス。',
+      '2016-10': '売れない芸人が先輩芸人に弟子入りし、笑いと人間の本質を探る関係の変化を描く。',
+      '2015-1': '帝国の奴隷となった戦士ヴァンが謎の病と犬の群れから生き残り、幼子ユナを守りながら冒険に立ち向かう。',
+      '2015-2': 'イラン生まれの主人公が、両親や問題児の姉とともにイラン、エジプト、日本を舞台に成長する長編小説。',
+      '2015-3': 'アニメ制作現場の監督、プロデューサー、声優、アニメーターが織りなすお仕事エンタメ小説。',
+      '2015-4': '正反対の性格を持つ二人の少女が本への愛を通じて、少女期から大人へと変わる十余年を描く。',
+      '2015-5': 'ソマリア国境で活動する自衛隊が、命を狙われた女性を守るため極限状況で戦う。',
+      '2015-6': '整形した殺人犯を追う物語。房総、東京、沖縄の三地域で謎の男たちとの遭遇が描かれる。',
+      '2015-7': 'ミステリー短編集。殺人容疑者の真の動機や、各短編に隠された真相が鮮やかに明かされる。',
+      '2015-8': '借金返済のため一攫千金を狙う主人公が、かつての級友との再会から謎の感染症に巻き込まれていく。',
+      '2015-9': '情けなくも愛おしい登場人物たちが日常で仕掛ける駆け引きを描く、魔法のような連作短編集。',
+      '2015-10': '宝くじで大金を手にした主人公が、失踪した親友とお金と幸せの意味を求める旅に出る。',
+      '2014-1': '戦国時代、瀬戸内海を舞台に海賊王の娘・景が信長と本願寺の対立の中で活躍する壮大な歴史冒険譚。',
+      '2014-2': '夫を亡くした嫁と義父が共に暮らし、その死を受け入れていく感動作。',
+      '2014-3': '瀬戸内の島に住む4人の同級生が、本土への高校通学と卒業を控えて友情と別れに向き合う青春譚。',
+      '2014-4': 'アフリカからオーストラリアに流れ着いた難民サリマが、言葉の障壁を乗り越えて新生活を切り開く。',
+      '2014-5': '戦国末期、伊賀を追われた忍び・風太郎が謎のひょうたんに導かれ豊臣秀頼や本阿弥光悦と関わる冒険譚。',
+      '2014-6': '警察学校の教官・風間公親が、生徒たちの適性を見極めていく異色の警察小説。',
+      '2014-7': '派遣社員が厳しい上司とのランチ交換を通じて、活力を取り戻すビタミン小説。',
+      '2014-8': '東日本大震災を背景に、生者と死者の新たな関係性を描いた作品。',
+      '2014-9': '京都を舞台に、怠け者の社会人が不可思議な出来事に巻き込まれる冒険ファンタジー。',
+      '2014-10': '猟奇殺人事件の真相を追う、複雑に絡み合った物語。',
+      '2013-1': '敗戦後の日本で石油会社の経営者が従業員を守りながら再起を図る経済歴史小説。',
+      '2013-2': '警察広報室に異動した刑事が、娘の失踪と未解決事件の真相に立ち向かう警察小説。',
+      '2013-3': 'ルソーの名画の真贋を巡り、美術館キュレーターと日本人研究者が7日間で真実を追う。',
+      '2013-4': '同じ町の人々が同じ午後に経験する、家族の傷と光を描く連作短編集。',
+      '2013-5': '世間との壁を感じていた編集者が、様々な出会いを通じて愛すべき世界に気付く。',
+      '2013-6': '絶望的な状況の3人が、迷い込んだクジラを見に南の半島への旅で希望を見出す。',
+      '2013-7': 'クリスマス未明の中学生転落死の真実を、生徒たちが追求する現代ミステリー。',
+      '2013-8': '余命わずかな郵便配達員が、悪魔との取引で世界からモノを消していく7日間の物語。',
+      '2013-9': '不老処置を受けた人々が100年目の強制死を前に選択を迫られるSF小説。',
+      '2013-10': '屍者化技術が拡散した19世紀末の英国で、秘密諜報員ワトソンの冒険を描くSF。',
+      '2012-1': '玄武書房の辞書編集部で、言葉の海を渡る舟「大渡海」の編纂に情熱を注ぐ人々の物語。',
+      '2012-2': 'アフリカで新たな生物が発見され、人類の存亡をかけた闘いが始まるパニックサスペンス。',
+      '2012-3': '18世紀ヴェネツィアで、ヴィヴァルディの死後に残された楽譜の謎を追う少女の物語。',
+      '2012-4': '長崎の中学校に産休代理の音楽教師が赴任。合唱コンクールに向かう生徒たちの青春。',
+      '2012-5': '人質となった8人が自らの物語を朗読するという設定の連作短編集。',
+      '2012-6': '実家で見つけた手記に書かれた殺人の告白。自分の家族に何が起きていたのかを追うサスペンス。',
+      '2012-7': 'あるレストランで会うはずの人が来ない。「誰かが足りない」6つの物語が描く人生の一瞬。',
+      '2012-8': '鎌倉の古書店を営む美人店主が、古書にまつわる謎を解き明かすビブリオミステリー。',
+      '2012-9': '琵琶湖畔の街で超能力を持つ名家の末っ子が巻き込まれる騒動を描くエンタメ小説。',
+      '2012-10': '多重人格の美女に翻弄される男の恋愛模様を描くサスペンス。',
+      '2011-1': '令嬢刑事と毒舌執事が難解な事件を解き明かすユーモアミステリ。',
+      '2011-2': '異なる境遇の人物たちが抱える「生きることの痛みと喜び」を描いた連作長編。',
+      '2011-3': '郊外の町に突然現れたペンギンの謎を少年が研究する物語。',
+      '2011-4': '昭和の激動期に無一文で旅に出た青年の自伝的冒険小説。',
+      '2011-5': 'ピアニストの天才少年と女子生徒殺人事件の謎を絡めたミステリ。',
+      '2011-6': '世界各国で青年が遭遇する異様な謎を描いた連作推理小説。',
+      '2011-7': '有能な教師の仮面をかぶった危険人物による完璧な犯罪を描く長編。',
+      '2011-8': '地方の病院で働く内科医とその妻の葛藤と試練を描く医療小説。',
+      '2011-9': '工科大学のサークルに属する理系男子たちの青春物語。',
+      '2011-10': '妻の不治の病と向き合う夫婦の極限的な選択を描く感動作。',
+      '2010-1': '江戸時代、日本独自の暦を作る大計画に挑む主人公の成長を描いた時代小説。',
+      '2010-2': '信州の病院で働く29歳の内科医が、患者との向き合い方と妻との生活のバランスに悩む医療ドラマ。',
+      '2010-3': '1980年代、長崎から上京した普通の大学生が様々な出会いを経験する青春小説。',
+      '2010-4': '高卒後に三重県の山村へ赴任した19歳が、林業の現場で働く人々と関わりながら成長する。',
+      '2010-5': '身体的コンプレックスから成長を恐れた少年が、チェスの世界で独自の道を歩む幻想的な物語。',
+      '2010-6': 'いじめに耐える14歳の少年が、同じ立場の者との関係を通じて異なる世界へ導かれる思春期の物語。',
+      '2010-7': '音楽科の生徒たちがオーケストラの過酷な練習を通じて成長する青春音楽小説。',
+      '2010-8': '拾った家事万能なイケメンが重度の植物オタクで、二人が週末に近所で過ごす恋愛小説。',
+      '2010-9': '日本橋へ着任したばかりの刑事・加賀恭一郎が、街の人情という謎を解きながら事件に迫る。',
+      '2010-10': '不思議な月が浮かぶ並行世界を舞台に、青豆と天吾の人生が交錯する壮大なファンタジー小説。',
+      '2009-1': 'デビュー作にして衝撃のベストセラー。中学校の終業式、教壇に立つ教師が語る驚愕の告白。',
+      '2009-2': '戦国時代、豊臣秀吉の大軍に対してわずか500人で難攻不落の忍城を守る成田長親を描く戦国エンタメ。',
+      '2009-3': '「死ぬな、殺すな、とらわれるな」。スパイ養成学校で訓練された精鋭たちによる諜報戦の物語。',
+      '2009-4': '19世紀琉球王朝。嵐の夜に生まれた神童が男として生きることになる大河小説。',
+      '2009-5': '天才と努力家の幼なじみ二人による青春ボクシング小説。',
+      '2009-6': '1000年後の日本で念動力を持つ人類が構築した社会の秘密を描くSF大作。',
+      '2009-7': '寛永14年、島原を襲った傷寒禍による苦難と、それに抗する民衆の武装蜂起を描く。',
+      '2009-8': '不慮の死を遂げた人々を「悼む」ため全国を放浪する主人公と関係者たちの生と死のドラマ。',
+      '2009-9': '両親を殺された三兄妹が14年後に復讐を遂行する物語。',
+      '2009-10': 'システムエンジニアが謎のプログラムに関わることで起きる不可解な事件を描く。',
+      '2008-1': '首相暗殺事件の犯人に濡れ衣を着せられた青年が、巨大な陰謀に追われながら必死に逃走するエンタテインメント。',
+      '2008-2': '自転車競技のプロロードレースチームでアシストとして活躍する選手が、ヨーロッパ遠征中に悲劇に遭遇する。',
+      '2008-3': '面白主義の狸・矢三郎が京都の街で繰り広げる波乱万丈な日常を描くユニークな物語。',
+      '2008-4': '加害者と被害者、その家族らの複雑な思いを描きながら「悪人」とは誰かを問う長編小説。',
+      '2008-5': '名作映画をモチーフに、傷ついた人々が共に悲しみを分かち合う5篇の短編集。',
+      '2008-6': '偽りの母子関係で逃亡生活を続ける二人の先に光があるのかを問う傑作長編。',
+      '2008-7': '鳥取の旧家に生きる三代の女性たちを戦後史の背景に描いた歴史冒険小説。',
+      '2008-8': '奈良の女子高に赴任した教師が下される空前絶後の救国指令を巡るファンタジー。',
+      '2008-9': '愛に飢えた親子が超えた禁忌を描く、圧倒的な筆力の長編小説。',
+      '2008-10': '故郷への帰郷と贖罪を通じて、人間の再生を描く感動的な長編小説。',
+      '2007-1': '高校陸上部に入った1年生が、天才スプリンターの幼なじみとともに青春を駆け抜ける。',
+      '2007-2': '京都を舞台に、黒髪の乙女に想いを寄せる先輩が珍事件の中で運命の転回を迎える。',
+      '2007-3': '箱根駅伝を目指す10人のランナーたちが、個性を活かしながら長距離走に挑むスポーツ青春小説。',
+      '2007-4': '小惑星衝突で余命3年という世界で、人々が生きることの意味を問う短編連作集。',
+      '2007-5': '表現の自由を守る図書隊と検閲機関が抗争する近未来ファンタジー。',
+      '2007-6': '謎の部活「ホルモー」に誘われた京大生たちの恋と成長を描くエンタテインメント。',
+      '2007-7': '1972年、芦屋の邸宅で暮らす少女ミーナとの一年間を描く美しい物語。',
+      '2007-8': 'ホームレス志願の会社員など、陽が当たらない人生を歩む人々のユーモアと感動の物語。',
+      '2007-9': '30年ごとの「消滅」で住民を失った町の人々が、さらなる消滅阻止に立ち向かう。',
+      '2007-10': '人の心の陥穽を描く連続毒殺事件ミステリー。杉村三郎シリーズ第2弾。',
+      '2006-1': '筑豊の炭鉱町での幼少期から上京後、母がガンと闘う中での親子関係を描いた感動作。',
+      '2006-2': '元過激派の変わった父が沖縄・西表島への移住を決めた際の、家族の絆と冒険を描くユーモラスな長編。',
+      '2006-3': '死神・千葉が主人公の連作短編集。6つの人生との出会いを描く。',
+      '2006-4': '天才数学者の高校教師が隣人の完全犯罪を企て、かつての友人である物理学者と対峙するガリレオシリーズ初の長篇。',
+      '2006-5': '生と死、そして日常の幸せをテーマに、家族の死を前にした連作短編集。',
+      '2006-6': '鮮烈な痛みに満ちた20歳の恋を描いた恋愛文学。',
+      '2006-7': '明治の河内を舞台に、男と男の友情と裏切りを描く谷崎潤一郎賞受賞の大作。',
+      '2006-8': 'キスカ島の軍用犬が世界中に広がり、戦争の世紀を駆け抜ける壮大な物語。',
+      '2006-9': 'エリート県庁職員がスーパーに出向し、パートの女性に鍛えられながら成長する。',
+      '2006-10': '愛犬サクラを中心に、家族の人生の転機と再生を描く。',
+      '2005-1': '高校生活最後の伝統行事「歩行祭」で、全校生徒が夜通し80キロを歩く中、秘密を清算しようとする少女の物語。',
+      '2005-2': '若年性アルツハイマーを宣告された49歳の広告マンが、記憶を失っていく恐怖と闘う。',
+      '2005-3': '百年前の設定で、天地自然の「気」たちと交流する新米文筆家の日常を描く不思議な物語。',
+      '2005-4': '高校の先輩に12年間思い続けた女性の切ない恋の物語。川端康成文学賞受賞。',
+      '2005-5': '独自の正義感を持つ男・陣内を中心に、5つの不思議な事件が最後に予想外の奇跡へ収束する連作短編。',
+      '2005-6': '結婚観や出産選択の違いにより溝が生じる、女社長と専業主婦の友情を描く。直木賞受賞。',
+      '2005-7': '劇場型犯罪に挑む刑事がテレビ生出演で犯人に呼びかける異色のサスペンス。',
+      '2005-8': '江戸寛永年間の長崎を舞台に、朱印船貿易家と火消組惣頭の活躍を描く歴史冒険小説。',
+      '2005-9': '大学教授をめぐる複数の「私」の視点から、迷える男女の孤独と家族関係の危うさを描く連作長編。',
+      '2005-10': '水草ショップの経営者のもとに現れた美しい女性との出会いから始まるファンタジックな青春ラブストーリー。',
+      '2004-1': '80分しか記憶が持たない博士と家政婦、その息子が数学を通じて心を通わせる感動の物語。',
+      '2004-2': '1985年の日航機墜落事故を取材する新聞記者が、個人的な葛藤と報道の使命の間で揺れ動く。',
+      '2004-3': '引っ越してきた青年が隣人に「一緒に本屋を襲わないか」と持ちかけられる、過去と現在が交錯するミステリー。',
+      '2004-4': '10歳から18歳まで、ごく普通の少女・紀子の成長を描く青春小説。',
+      '2004-5': '謎の連続放火事件とグラフィティアートをめぐり、兄弟が家族の痛ましい過去に向き合う。',
+      '2004-6': '東京・月島を自転車で駆け回る14歳の少年4人の友情、恋、挑戦を描く青春小説。',
+      '2004-7': '失恋と予期せぬ喜びの瞬間を通じて愛と幸福を探る短編集。',
+      '2004-8': '第二次大戦末期、ドイツの潜水艦とその乗組員の運命を描く戦争小説。',
+      '2004-9': '花嫁が次々と謎の死を遂げる呪われた屋敷の謎を追うミステリー。',
+      '2004-10': '過去から未来へ逃れようとする男の不思議な旅を描くSF小説。',
+    };
+
+    function openModal(year) {
+      const data = awardsData[year];
+      if (!data) return;
+
+      document.getElementById('modal-year').textContent = year;
+      document.getElementById('modal-round').textContent = `第 ${data.round} 回 本屋大賞`;
+
+      const list = document.getElementById('book-list');
+      list.innerHTML = '';
+      const covers = nomineeCoverImages[year] || [];
+
+      data.nominees.forEach(book => {
+        const isWinner = book.rank === 1;
+        const coverUrl = covers[book.rank - 1] || '';
+        const hasSynopsis = !!bookSynopses[`${year}-${book.rank}`];
+        const item = document.createElement('div');
+        item.className = 'book-item' + (isWinner ? ' winner' : '');
+        item.onclick = () => showBookDetail(year, book.rank);
+
+        item.innerHTML = `
+          <div class="book-rank">${book.rank}位</div>
+          <div class="cover-wrap${coverUrl ? ' has-cover' : ''}">
+            ${coverUrl ? `<img alt="表紙" class="cover-img loaded" src="${coverUrl}" loading="lazy">` : '<div class="cover-placeholder">📖</div>'}
+          </div>
+          <div class="book-info">
+            <div class="book-title">${book.title}</div>
+            <div class="book-author">${book.author}</div>
+          </div>
+          ${isWinner ? '<div class="winner-badge">大賞</div>' : '<div style="color:#C8973F;font-size:0.7rem;flex-shrink:0;">▶</div>'}
+        `;
+        list.appendChild(item);
+      });
+
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function showBookDetail(year, rank) {
+      const data = awardsData[year];
+      const book = data.nominees.find(n => n.rank === rank);
+      if (!book) return;
+      const covers = nomineeCoverImages[year] || [];
+      const coverUrl = covers[rank - 1] || '';
+      const synopsis = bookSynopses[`${year}-${rank}`] || '';
+
+      const list = document.getElementById('book-list');
+      list.innerHTML = `
+        <div class="book-detail">
+          <button class="book-detail-back" onclick="openModal(${year})">← ノミネート一覧に戻る</button>
+          ${coverUrl ? `<div><img class="book-detail-cover" src="${coverUrl}" alt="${book.title}"></div>` : ''}
+          <div class="book-detail-title">${book.title}</div>
+          <div class="book-detail-author">著 / ${book.author}</div>
+          ${synopsis
+            ? `<div class="book-detail-synopsis">${synopsis}</div>`
+            : '<div class="book-detail-synopsis" style="color:#999;font-style:italic;">あらすじは準備中です</div>'}
+          <div class="book-detail-links">
+            <a class="book-amazon" href="${amazonUrl(book.title, book.author)}" target="_blank">Amazon で見る</a>
+          </div>
+        </div>
+      `;
+      list.parentElement.scrollTop = 0;
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modal')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    /* ===== SHINDAN ===== */
+    const shindanQuestions = [
+      { step: 'Q1', q: '今、読みたいのは？', opts: [
+        { label: '心が動く感動する話', value: 'emotional' },
+        { label: 'ハラハラドキドキする話', value: 'exciting' },
+      ]},
+      { step: 'Q2', q: 'どんなテーマに惹かれる？', opts: [
+        { label: '恋愛・家族・人間関係', value: 'relationship' },
+        { label: '挑戦・冒険・謎解き', value: 'adventure' },
+      ]},
+      { step: 'Q3', q: '主人公はどんな人がいい？', opts: [
+        { label: '10代〜20代の若者', value: 'young' },
+        { label: '大人（社会人）', value: 'adult' },
+      ]},
+      { step: 'Q4', q: '読んだあと、どんな気持ちになりたい？', opts: [
+        { label: '希望や前向きな気持ち', value: 'hopeful' },
+        { label: '深い余韻に浸りたい', value: 'lingering' },
+      ]},
+    ];
+
+    const shindanResults = {
+      'emotional-relationship-young-hopeful': [
+        { year: 2024, rank: 1, comment: '我が道を行く成瀬あかりの痛快な青春に元気がもらえる！' },
+        { year: 2021, rank: 2, comment: '不愛想な司書の選書が、人生を少しだけ変えてくれる。' },
+        { year: 2021, rank: 3, comment: '高校に迷い込んだ犬と生徒たちの、瑞々しい青春物語。' },
+        { year: 2024, rank: 7, comment: '公園のカバの遊具に悩みを打ち明ける、心温まる連作短編。' },
+        { year: 2025, rank: 10, comment: '成瀬あかり再び。我が道を信じて進む彼女の続編。' },
+      ],
+      'emotional-relationship-young-lingering': [
+        { year: 2023, rank: 1, comment: '島で出会った2人の切ない恋と成長に胸が締めつけられる。' },
+        { year: 2016, rank: 2, comment: '余命わずかなクラスメイトとの交流が涙を誘う。' },
+        { year: 2021, rank: 9, comment: '推しの炎上。ままならない人生を生きる少女の叫び。' },
+        { year: 2023, rank: 3, comment: '2人の少女の絆が時を超えて紡がれる、美しく切ない物語。' },
+        { year: 2016, rank: 4, comment: '妻の死を機に人生を見つめ直す、静かで深い余韻。' },
+      ],
+      'emotional-relationship-adult-hopeful': [
+        { year: 2025, rank: 1, comment: '温かな料理が凍りついた日常をほどいていく。' },
+        { year: 2019, rank: 1, comment: '血のつながらない親たちにリレーされて育った少女の物語。' },
+        { year: 2025, rank: 5, comment: '「人魚が逃げた」。銀座で交差する5人の運命。' },
+        { year: 2023, rank: 5, comment: 'ポッドキャストが繋ぐ、つまずいた人々の再生物語。' },
+        { year: 2017, rank: 4, comment: '鎌倉の代書屋が依頼者の心に寄り添い、自分とも向き合う。' },
+      ],
+      'emotional-relationship-adult-lingering': [
+        { year: 2020, rank: 1, comment: '「普通」の幸せとは何かを問いかける、深い余韻の傑作。' },
+        { year: 2019, rank: 6, comment: '43歳の女性の死後、言葉が波紋のように広がっていく。' },
+        { year: 2022, rank: 10, comment: '22年ぶりに再会した母娘。過去のわだかまりをほぐす。' },
+        { year: 2022, rank: 6, comment: '貧困と過重労働。15年間の友情が問いかけるもの。' },
+        { year: 2021, rank: 5, comment: '恋も仕事も家族も。32歳女性の等身大の悩みと選択。' },
+      ],
+      'emotional-adventure-young-hopeful': [
+        { year: 2017, rank: 1, comment: 'ピアノコンクールの熱気が伝わる、音楽と青春の感動作。' },
+        { year: 2007, rank: 1, comment: '天才スプリンターと共に全力で駆け抜ける青春。' },
+        { year: 2007, rank: 3, comment: '箱根駅伝を目指す10人。個性派ランナーの熱い挑戦。' },
+        { year: 2016, rank: 1, comment: 'ピアノ調律師を目指す青年の、音の森への旅。' },
+        { year: 2020, rank: 3, comment: '水墨画の線を描くことで生きる意味を見出していく。' },
+      ],
+      'emotional-adventure-young-lingering': [
+        { year: 2021, rank: 1, comment: '誰にも届かない叫びを救う物語。世界の見え方が変わる。' },
+        { year: 2004, rank: 1, comment: '80分しか記憶が持たない博士と、数学が繋ぐ温かな絆。' },
+        { year: 2011, rank: 3, comment: '郊外に現れたペンギンの謎を少年が追う不思議な物語。' },
+        { year: 2023, rank: 8, comment: '2人の母を持つ子の、料理を通じた成長物語。' },
+        { year: 2021, rank: 10, comment: '本の呪いで物語世界に変わった街を冒険する。' },
+      ],
+      'emotional-adventure-adult-hopeful': [
+        { year: 2012, rank: 1, comment: '言葉の海を渡る「舟」を編む人々の情熱に心が温まる。' },
+        { year: 2017, rank: 5, comment: '傷心の書店員が旅先で出会った老書店主と心を再生する。' },
+        { year: 2010, rank: 1, comment: '江戸時代、日本独自の暦づくりに挑む壮大な時代小説。' },
+        { year: 2010, rank: 2, comment: '地方病院の内科医が患者と向き合う日々。温かい医療ドラマ。' },
+        { year: 2018, rank: 9, comment: '閉店危機の百貨店を守ろうとする人々の奮闘記。' },
+      ],
+      'emotional-adventure-adult-lingering': [
+        { year: 2020, rank: 2, comment: 'ホスピスでの穏やかな日々が、生きる意味を静かに問う。' },
+        { year: 2006, rank: 1, comment: 'オカンとの絆。笑って泣ける自伝的感動作。' },
+        { year: 2020, rank: 7, comment: '「子どもに会いたい」。出産の意味を深く問いかける。' },
+        { year: 2024, rank: 4, comment: '終末期医療の現場で哲学者スピノザの教えに導かれる。' },
+        { year: 2009, rank: 8, comment: '不慮の死を「悼む」ため全国を放浪する男の旅。' },
+      ],
+      'exciting-relationship-young-hopeful': [
+        { year: 2023, rank: 2, comment: 'チェロの音色と秘密の任務。予想外の展開にのめり込む。' },
+        { year: 2018, rank: 1, comment: '鏡の中の城で出会った7人。最後に大きな感動が待つ。' },
+        { year: 2025, rank: 9, comment: 'スピーカーに憑依した山田と教室の、笑えて泣ける日々。' },
+        { year: 2021, rank: 4, comment: '「僕はそうは思わない」。先入観に立ち向かう5つの短編。' },
+        { year: 2021, rank: 8, comment: 'マッチングアプリ時代の3人の若者の運命が交錯する。' },
+      ],
+      'exciting-relationship-young-lingering': [
+        { year: 2023, rank: 7, comment: '水没する地下建築。極限状態で人間の本性が試される。' },
+        { year: 2022, rank: 4, comment: '「多様性」の裏側。異なる立場の生きづらさを鋭く描く。' },
+        { year: 2018, rank: 7, comment: '宗教にのめり込む両親。家族の形が歪んでいく。' },
+        { year: 2025, rank: 7, comment: '恋人が盗撮で逮捕。たった一度の過ちが広げる波紋。' },
+        { year: 2025, rank: 4, comment: '自分と瓜二つの遺体。自らのルーツを辿る先に待つ真相。' },
+      ],
+      'exciting-relationship-adult-hopeful': [
+        { year: 2006, rank: 4, comment: '天才数学者vs物理学者。究極の頭脳戦ガリレオシリーズ。' },
+        { year: 2014, rank: 6, comment: '警察学校の鬼教官が生徒の適性を見極める異色の警察小説。' },
+        { year: 2019, rank: 5, comment: '愛した夫が「全くの別人」だった。愛と過去の意味を問う。' },
+        { year: 2018, rank: 6, comment: '出版社の策略と政争。ラストの真実に驚愕する群像劇。' },
+        { year: 2018, rank: 8, comment: '脳腫瘍の女性と研修医。心を通わせた先に待つ結末。' },
+      ],
+      'exciting-relationship-adult-lingering': [
+        { year: 2009, rank: 1, comment: '教師の衝撃的な告白。読む手が止まらない傑作ミステリー。' },
+        { year: 2019, rank: 9, comment: '神楽坂を舞台に怪談と恐怖が絡み合うダークミステリ。' },
+        { year: 2008, rank: 4, comment: '加害者と被害者。「悪人」とは誰かを問う重厚な長編。' },
+        { year: 2008, rank: 9, comment: '愛に飢えた親子が超えた禁忌。圧倒的な筆力の問題作。' },
+        { year: 2014, rank: 10, comment: '猟奇殺人事件の真相。複雑に絡み合う闇の物語。' },
+      ],
+      'exciting-adventure-young-hopeful': [
+        { year: 2022, rank: 1, comment: '少女狙撃兵の苛烈な戦いと成長。圧倒的な歴史冒険譚。' },
+        { year: 2007, rank: 5, comment: '図書隊vs検閲機関。表現の自由を守る近未来バトル。' },
+        { year: 2007, rank: 6, comment: '京大の謎の部活「ホルモー」。笑って興奮する青春劇。' },
+        { year: 2015, rank: 1, comment: '戦士ヴァンと幼子ユナの壮大なファンタジー冒険。' },
+        { year: 2024, rank: 5, comment: '呪われた地レーエンデを舞台にした王道ファンタジー。' },
+      ],
+      'exciting-adventure-young-lingering': [
+        { year: 2022, rank: 5, comment: '就活×心理戦。6人の嘘と真実のどんでん返しに唸る。' },
+        { year: 2018, rank: 3, comment: '夏合宿のクローズドサークルで連続殺人。衝撃の展開。' },
+        { year: 2023, rank: 6, comment: '問題が読まれる前に正解。なぜ？知的興奮のミステリー。' },
+        { year: 2023, rank: 4, comment: '「爆発がある」と予言する犯人。スリル満点の傑作。' },
+        { year: 2007, rank: 2, comment: '京都の夜。黒髪の乙女を巡る珍事件と運命の転回。' },
+      ],
+      'exciting-adventure-adult-hopeful': [
+        { year: 2008, rank: 1, comment: '濡れ衣の逃走劇。伊坂幸太郎の最高傑作と名高い1冊。' },
+        { year: 2020, rank: 6, comment: '霊媒師と推理作家の異色コンビが事件を解き明かす。' },
+        { year: 2011, rank: 1, comment: '令嬢刑事と毒舌執事。軽快で痛快なミステリ。' },
+        { year: 2009, rank: 3, comment: 'スパイ養成学校の精鋭たちが繰り広げる知的な諜報戦。' },
+        { year: 2014, rank: 1, comment: '戦国の瀬戸内海。海賊王の娘が戦場を駆ける歴史大作。' },
+      ],
+      'exciting-adventure-adult-lingering': [
+        { year: 2013, rank: 1, comment: '敗戦後の日本で石油会社を守り抜いた男の壮大なドラマ。' },
+        { year: 2022, rank: 9, comment: '有岡城の土牢に幽閉された官兵衛が謎を解く戦国ミステリー。' },
+        { year: 2013, rank: 2, comment: '娘の失踪と未解決事件。警察組織の闇に迫る重厚な警察小説。' },
+        { year: 2020, rank: 5, comment: '樺太のアイヌの人々。生きるための「熱」を追う歴史大作。' },
+        { year: 2009, rank: 6, comment: '1000年後の日本。念動力の社会に隠された恐るべき秘密。' },
+      ],
+    };
+
+    let shindanAnswers = [];
+
+    function startShindan() {
+      shindanAnswers = [];
+      document.getElementById('shindan').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      renderShindanQuestion(0);
+    }
+
+    function closeShindan() {
+      document.getElementById('shindan').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderShindanQuestion(idx) {
+      const q = shindanQuestions[idx];
+      const el = document.getElementById('shindan-content');
+      el.innerHTML = `
+        <div class="shindan-step">QUESTION ${idx + 1} / ${shindanQuestions.length}</div>
+        <div class="shindan-q">${q.q}</div>
+        <div class="shindan-options">
+          ${q.opts.map(o => `<button class="shindan-opt" onclick="answerShindan(${idx},'${o.value}')">${o.label}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    function answerShindan(idx, value) {
+      shindanAnswers.push(value);
+      if (idx + 1 < shindanQuestions.length) {
+        renderShindanQuestion(idx + 1);
+      } else {
+        showShindanResult();
+      }
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    }
+
+    function showShindanResult() {
+      const key = shindanAnswers.join('-');
+      const pool = shindanResults[key];
+      if (!pool) { closeShindan(); return; }
+      renderShindanBooks(shuffle(pool).slice(0, 3));
+    }
+
+    function reshuffleShindan() {
+      const key = shindanAnswers.join('-');
+      const pool = shindanResults[key];
+      renderShindanBooks(shuffle(pool).slice(0, 3));
+    }
+
+    let lastShindanPicks = [];
+
+    function renderShindanBooks(picks) {
+      lastShindanPicks = picks;
+      const el = document.getElementById('shindan-content');
+      const cards = picks.map((r, i) => {
+        const data = awardsData[r.year];
+        const book = data.nominees.find(n => n.rank === r.rank);
+        const covers = nomineeCoverImages[r.year] || [];
+        const coverUrl = covers[r.rank - 1] || '';
+        const badge = r.rank === 1 ? `${r.year} 大賞` : `${r.year} ${r.rank}位`;
+        return `
+          <div class="shindan-card" onclick="showShindanDetail(${r.year},${r.rank})">
+            ${coverUrl ? `<img src="${coverUrl}" alt="${book.title}" loading="lazy">` : ''}
+            <div class="shindan-card-info">
+              <div class="shindan-card-badge">${badge}</div>
+              <div class="shindan-card-title">${book.title}</div>
+              <div class="shindan-card-author">著 / ${book.author}</div>
+              <div class="shindan-card-comment">${r.comment}</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="shindan-step">あなたにおすすめの本</div>
+        <div class="shindan-q" style="font-size:0.95rem;margin-bottom:1rem;">気になる本をタップして詳細を見る</div>
+        <div class="shindan-results-grid">${cards}</div>
+        <div class="shindan-btns">
+          <button class="shindan-shuffle" onclick="reshuffleShindan()">🔀 別の本を見る</button>
+          <button class="shindan-again" onclick="startShindan()">最初からやり直す</button>
+        </div>
+      `;
+    }
+
+    function showShindanDetail(year, rank) {
+      const data = awardsData[year];
+      const book = data.nominees.find(n => n.rank === rank);
+      if (!book) return;
+      const covers = nomineeCoverImages[year] || [];
+      const coverUrl = covers[rank - 1] || '';
+      const synopsis = bookSynopses[`${year}-${rank}`] || '';
+      const badge = rank === 1 ? `${year}年 本屋大賞 大賞受賞作` : `${year}年 本屋大賞 ${rank}位`;
+
+      const el = document.getElementById('shindan-content');
+      el.innerHTML = `
+        <div class="book-detail" style="animation:fadeIn 0.2s;">
+          <button class="book-detail-back" onclick="renderShindanBooks(lastShindanPicks)">← 診断結果に戻る</button>
+          ${coverUrl ? `<div><img class="book-detail-cover" src="${coverUrl}" alt="${book.title}"></div>` : ''}
+          <div class="book-detail-title">${book.title}</div>
+          <div class="book-detail-author">著 / ${book.author}</div>
+          <div style="font-size:0.7rem;color:#C8973F;margin-bottom:1rem;">${badge}</div>
+          ${synopsis
+            ? `<div class="book-detail-synopsis">${synopsis}</div>`
+            : '<div class="book-detail-synopsis" style="color:#999;font-style:italic;">あらすじは準備中です</div>'}
+          <div class="book-detail-links">
+            <a class="book-amazon" href="${amazonUrl(book.title, book.author)}" target="_blank">Amazon で見る</a>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ===== SEARCH ===== */
+    function buildSearchIndex() {
+      const index = [];
+      Object.entries(awardsData).forEach(([year, data]) => {
+        data.nominees.forEach(book => {
+          const covers = nomineeCoverImages[year] || [];
+          index.push({
+            year: Number(year), rank: book.rank, round: data.round,
+            title: book.title, author: book.author,
+            cover: covers[book.rank - 1] || '',
+          });
+        });
+      });
+      return index;
+    }
+
+    let searchIndex = [];
+
+    function handleSearch(e) {
+      const q = e.target.value.trim().toLowerCase();
+      const resultsEl = document.getElementById('search-results');
+
+      if (!q) {
+        resultsEl.classList.remove('open');
+        resultsEl.innerHTML = '';
+        return;
+      }
+
+      const matches = searchIndex.filter(b =>
+        b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
+      ).slice(0, 20);
+
+      if (matches.length === 0) {
+        resultsEl.innerHTML = '<div class="search-empty">該当する作品が見つかりません</div>';
+      } else {
+        const countText = `<div class="search-count">${matches.length}件${matches.length === 20 ? '以上' : ''}の結果</div>`;
+        resultsEl.innerHTML = countText + matches.map(b => {
+          const badge = b.rank === 1 ? `${b.year} 大賞` : `${b.year} ${b.rank}位`;
+          return `
+            <div class="search-item" onclick="openSearchDetail(${b.year},${b.rank})">
+              ${b.cover ? `<img src="${b.cover}" alt="${b.title}" loading="lazy">` : ''}
+              <div class="search-item-info">
+                <div class="search-item-title">${b.title}</div>
+                <div class="search-item-meta">${b.author}</div>
+              </div>
+              <span class="search-item-badge">${badge}</span>
+            </div>`;
+        }).join('');
+      }
+      resultsEl.classList.add('open');
+    }
+
+    function openSearchDetail(year, rank) {
+      document.getElementById('search-results').classList.remove('open');
+      document.getElementById('search-input').value = '';
+      openModal(year);
+      setTimeout(() => showBookDetail(year, rank), 50);
+    }
+
+    document.addEventListener('click', e => {
+      const wrap = document.querySelector('.search-wrap');
+      if (!wrap.contains(e.target)) {
+        document.getElementById('search-results').classList.remove('open');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCards();
+      searchIndex = buildSearchIndex();
+      document.getElementById('search-input').addEventListener('input', handleSearch);
+    });
+  </script>
+</body>
+</html>

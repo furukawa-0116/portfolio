@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>趣味紹介 - 古川怜</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #0f172a;
+      color: #f1f5f9;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      color: #38bdf8;
+    }
+    header p {
+      margin-top: 0.5rem;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1rem;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: #e2e8f0;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+    }
+    footer a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>趣味紹介</h1>
+    <p>古川怜の好きなこと</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon">⚽</div>
+      <h2>スポーツ</h2>
+      <p>体を動かすことが好きで、スポーツを通じて仲間と楽しい時間を過ごしています。</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🎵</div>
+      <h2>音楽</h2>
+      <p>音楽を聴いたり演奏したりすることで、日々の生活に彩りを添えています。</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">📺</div>
+      <h2>ドラマ・本</h2>
+      <p>ドラマや本を通じてさまざまな世界観や物語に触れることを楽しんでいます。</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="index.html">← トップに戻る</a>
+  </footer>
+</body>
+</html>

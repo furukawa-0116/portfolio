@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mr.Children - 古川怜</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #111; color: #E8E0D4; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(165deg, #1A1410 0%, #0A0A0A 50%, #1A1410 100%);
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(212,168,83,0.08) 0%, transparent 70%);
+    }
+    .hero-band {
+      font-family: 'Georgia', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: #E8E0D4;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.3rem;
+      position: relative;
+    }
+    .hero-sub {
+      font-size: 0.72rem;
+      color: #D4A853;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      position: relative;
+    }
+    .hero-divider {
+      width: 40px; height: 1px; background: #D4A853; margin: 1.2rem auto 0; opacity: 0.6;
+      position: relative;
+    }
+    .hero-desc {
+      font-size: 0.82rem; color: #8A7E70; margin-top: 1rem; letter-spacing: 0.06em;
+      position: relative;
+    }
+
+    /* ===== RANKING ===== */
+    .ranking { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 3rem; }
+    .ranking-title {
+      font-size: 0.68rem; color: #D4A853; letter-spacing: 0.3em; text-transform: uppercase;
+      text-align: center; margin-bottom: 1.8rem;
+    }
+
+    .song-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(255,255,255,0.03); border-radius: 0.5rem; padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem; cursor: pointer;
+      border: 1px solid rgba(212,168,83,0.08);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .song-card:hover {
+      background: rgba(212,168,83,0.06);
+      border-color: rgba(212,168,83,0.25);
+    }
+
+    .song-rank {
+      font-family: 'Georgia', serif;
+      font-size: 1.1rem; font-weight: 400; color: #5A5048; min-width: 2rem; text-align: center;
+      letter-spacing: 0.05em;
+    }
+    .song-rank.top3 { color: #D4A853; }
+
+    .song-thumb {
+      width: 48px; height: 48px; border-radius: 0.2rem; object-fit: cover; flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .song-info { flex: 1; min-width: 0; }
+    .song-name {
+      font-weight: 600; font-size: 0.92rem; color: #E8E0D4;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .song-album { font-size: 0.7rem; color: #6A5E52; margin-top: 0.15rem; }
+    .song-arrow { color: #3A3430; font-size: 0.7rem; flex-shrink: 0; transition: color 0.2s; }
+    .song-card:hover .song-arrow { color: #D4A853; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      z-index: 1000; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #1A1714; border-radius: 1rem; max-width: 460px; width: 100%;
+      max-height: 90vh; overflow-y: auto; position: relative;
+      border: 1px solid rgba(212,168,83,0.1);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    }
+    .modal-close {
+      position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: none;
+      font-size: 1.3rem; cursor: pointer; color: #5A5048; z-index: 10;
+    }
+    .modal-close:hover { color: #D4A853; }
+    .modal-jacket {
+      width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 1rem 1rem 0 0;
+    }
+    .modal-body { padding: 1.5rem; }
+    .modal-title {
+      font-family: 'Georgia', serif;
+      font-size: 1.3rem; font-weight: 400; color: #E8E0D4; margin-bottom: 0.25rem;
+      letter-spacing: 0.03em;
+    }
+    .modal-artist { font-size: 0.8rem; color: #6A5E52; margin-bottom: 1.2rem; }
+
+    .info-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; font-size: 0.82rem; }
+    .info-label { color: #D4A853; font-weight: 600; white-space: nowrap; font-size: 0.72rem; letter-spacing: 0.05em; }
+    .info-value { color: #B0A898; }
+
+    .modal-links { margin-top: 1.2rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .modal-link {
+      display: inline-block; font-size: 0.72rem; color: #D4A853; text-decoration: none;
+      border: 1px solid rgba(212,168,83,0.3); border-radius: 0.25rem; padding: 0.25rem 0.7rem;
+      transition: background 0.15s, color 0.15s; letter-spacing: 0.04em;
+    }
+    .modal-link:hover { background: #D4A853; color: #111; }
+
+    /* ===== BACK ===== */
+    .back {
+      display: block; text-align: center; padding: 2rem;
+      color: #5A5048 !important; font-size: 0.82rem; text-decoration: none;
+      letter-spacing: 0.05em; border-top: 1px solid rgba(212,168,83,0.08);
+    }
+    .back:hover { color: #D4A853 !important; }
+
+    /* Override nav active for this page */
+    header { display: none; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-link">Top</a>
+      <a href="sports.html" class="nav-link">スポーツ</a>
+      <a href="music.html" class="nav-link">音楽</a>
+      <a href="drama.html" class="nav-link">ドラマ・本</a>
+      <a href="members.html" class="nav-link">メンバー</a>
+      <a href="mrchildren.html" class="nav-link active">Mr.Children</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-band">Mr.Children</div>
+    <div class="hero-sub">Karaoke Ranking</div>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">JOYSOUND カラオケ人気曲ランキング TOP 10</p>
+  </div>
+
+  <div class="ranking">
+    <div class="ranking-title">— Popular Songs —</div>
+    <div id="ranking"></div>
+  </div>
+
+  <a class="back" href="index.html">← Back to Top</a>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <img class="modal-jacket" id="modal-jacket" alt="ジャケット">
+      <div class="modal-body">
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-artist">Mr.Children / 作詞・作曲：桜井和寿</div>
+        <div class="info-grid" id="modal-info"></div>
+        <div class="modal-links" id="modal-links"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const songs = [
+      {
+        rank: 1, title: 'HANABI',
+        album: 'SUPERMARKET FANTASY', single: '33rd Single', release: '2008.09.03',
+        tieup: 'コード・ブルー -ドクターヘリ緊急救命- 主題歌',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/05/dd/70/05dd70e7-7e34-1836-4683-ff416d11a35c/dj.xwkpljqa.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/121447',
+      },
+      {
+        rank: 2, title: 'Tomorrow never knows',
+        album: 'Atomic Heart / BOLERO', single: '6th Single', release: '1994.11.10',
+        tieup: '若者のすべて (フジテレビドラマ) 主題歌',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/96/1d/65/961d6574-e8e6-8e6b-32d6-93ec2ed5a416/dj.wojuzgpi.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/12554',
+      },
+      {
+        rank: 3, title: 'Again',
+        album: 'miss you', single: 'Digital Single', release: '2023.08.22',
+        tieup: '',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ea/9a/85/ea9a8557-5000-9c49-bc57-5b2a0f885394/TFDS-01285.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/1152146',
+      },
+      {
+        rank: 4, title: 'Sign',
+        album: 'I ♥ U', single: '25th Single', release: '2004.05.26',
+        tieup: 'オレンジデイズ (TBSドラマ) 主題歌',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/c0/73/e3c0732d-a0ea-bb1f-e08c-ba4c392970df/dj.vwvtxzla.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/24426',
+      },
+      {
+        rank: 5, title: '抱きしめたい',
+        album: 'Kind of Love', single: '3rd Single', release: '1992.12.01',
+        tieup: '',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4a/00/f0/4a00f00c-775c-2e57-3f94-0ea1e06216bb/dj.rgydjnvo.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/7595',
+      },
+      {
+        rank: 6, title: 'シーソーゲーム~勇敢な恋の歌~',
+        album: 'BOLERO', single: '10th Single', release: '1995.08.10',
+        tieup: '',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ed/39/d8/ed39d801-38a2-21b5-49e5-5e326a8ee7fa/dj.xeliymez.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/9330',
+      },
+      {
+        rank: 7, title: 'innocent world',
+        album: 'Atomic Heart', single: '5th Single', release: '1994.06.01',
+        tieup: '',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/58/72/33/587233f4-daeb-7819-e8e6-6558517ffe15/dj.jamqsvjt.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/785',
+      },
+      {
+        rank: 8, title: 'しるし',
+        album: 'HOME / B-SIDE', single: '28th Single', release: '2006.11.15',
+        tieup: '14才の母 (日テレドラマ) 主題歌',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e2/f5/31/e2f531ef-3d22-44f2-2f3c-7170725eec29/dj.mxqqwpdb.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/93710',
+      },
+      {
+        rank: 9, title: '名もなき詩',
+        album: 'BOLERO', single: '11th Single', release: '1996.02.05',
+        tieup: 'ピュア (フジテレビドラマ) 主題歌',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9b/7e/5e/9b7e5e86-e4fa-722c-58ec-2a46f4da5445/dj.toijfdmn.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/9728',
+      },
+      {
+        rank: 10, title: '終わりなき旅',
+        album: 'DISCOVERY', single: '15th Single', release: '1998.10.21',
+        tieup: '',
+        artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9b/7e/5e/9b7e5e86-e4fa-722c-58ec-2a46f4da5445/dj.toijfdmn.jpg/300x300bb.jpg',
+        joysound: 'https://www.joysound.com/web/search/song/18205',
+      },
+    ];
+
+    function renderRanking() {
+      const container = document.getElementById('ranking');
+      songs.forEach(song => {
+        const card = document.createElement('div');
+        card.className = 'song-card';
+        card.onclick = () => openModal(song);
+        card.innerHTML = `
+          <div class="song-rank${song.rank <= 3 ? ' top3' : ''}">${song.rank}</div>
+          <img class="song-thumb" src="${song.artwork}" alt="${song.title}" loading="lazy">
+          <div class="song-info">
+            <div class="song-name">${song.title}</div>
+            <div class="song-album">${song.single} / ${song.album}</div>
+          </div>
+          <div class="song-arrow">▶</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openModal(song) {
+      document.getElementById('modal-jacket').src = song.artwork.replace('300x300', '600x600');
+      document.getElementById('modal-title').textContent = song.title;
+
+      const info = document.getElementById('modal-info');
+      const rows = [
+        ['順位', `JOYSOUND ${song.rank}位`],
+        ['シングル', song.single],
+        ['収録アルバム', song.album],
+        ['発売日', song.release],
+      ];
+      if (song.tieup) rows.push(['タイアップ', song.tieup]);
+      info.innerHTML = rows.map(([l, v]) =>
+        `<div class="info-label">${l}</div><div class="info-value">${v}</div>`
+      ).join('');
+
+      const links = document.getElementById('modal-links');
+      links.innerHTML = `
+        <a class="modal-link" href="${song.joysound}" target="_blank">JOYSOUND で見る</a>
+        <a class="modal-link" href="https://www.amazon.co.jp/s?k=Mr.Children+${encodeURIComponent(song.title)}" target="_blank">Amazon で探す</a>
+      `;
+
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('DOMContentLoaded', renderRanking);
+  </script>
+</body>
+</html>

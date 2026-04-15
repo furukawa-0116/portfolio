@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メンバー一覧 - Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-link">Top</a>
+      <a href="sports.html" class="nav-link">スポーツ</a>
+      <a href="music.html" class="nav-link">音楽</a>
+      <a href="drama.html" class="nav-link">ドラマ・本</a>
+      <a href="members.html" class="nav-link active">メンバー</a>
+      <a href="mrchildren.html" class="nav-link">Mr.Children</a>
+    </div>
+  </nav>
+  <header>
+    <div class="stars">★ ★ ★ ★ ★</div>
+    <h1>Member List</h1>
+    <p>全 4 名</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filter('all', this)">すべて</button>
+    <button class="filter-btn" onclick="filter('開発部', this)">開発部</button>
+    <button class="filter-btn" onclick="filter('営業部', this)">営業部</button>
+    <button class="filter-btn" onclick="filter('マーケティング部', this)">マーケティング部</button>
+  </div>
+
+  <div class="grid" id="grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+    <div class="card" data-dept="開発部">
+      <div class="name">佐藤 太郎</div>
+      <div class="dept">開発部</div>
+      <div class="year">2020</div>
+    </div>
+    <div class="card" data-dept="開発部">
+      <div class="name">鈴木 一郎</div>
+      <div class="dept">開発部</div>
+      <div class="year">2022</div>
+    </div>
+    <div class="card" data-dept="営業部">
+      <div class="name">田中 美咲</div>
+      <div class="dept">営業部</div>
+      <div class="year">2021</div>
+    </div>
+    <div class="card" data-dept="マーケティング部">
+      <div class="name">高橋 健太</div>
+      <div class="dept">マーケティング部</div>
+      <div class="year">2023</div>
+    </div>
+  </div>
+
+  <a class="back" href="index.html">← Back to Top</a>
+
+  <script src="script.js"></script>
+</body>
+</html>
